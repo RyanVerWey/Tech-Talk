@@ -2,7 +2,7 @@
 
 A comprehensive alumni networking platform built with React, Vite, Tailwind CSS, Material UI, Node.js, Express, and MongoDB.
 
-## 🚀 Features
+## Features
 
 - **Authentication**: Google OAuth 2.0 integration
 - **Blog System**: Create, read, vote, and rate blog posts
@@ -10,7 +10,7 @@ A comprehensive alumni networking platform built with React, Vite, Tailwind CSS,
 - **Project Primers**: Share and collaborate on project ideas
 - **Responsive Design**: Mobile-first approach with Tailwind CSS and Material UI
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - React 19
@@ -29,7 +29,7 @@ A comprehensive alumni networking platform built with React, Vite, Tailwind CSS,
 - JWT Authentication
 - Helmet & Security middleware
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
 - **Git** - [Download here](https://git-scm.com/downloads)
@@ -37,7 +37,7 @@ A comprehensive alumni networking platform built with React, Vite, Tailwind CSS,
 - **Google Account** for OAuth credentials
 - **Heroku Account** for deployment (when ready)
 
-## 🏃‍♂️ Complete Setup Guide
+## Complete Setup Guide
 
 ### Step 1: Clone Repository & Install Dependencies
 
@@ -221,13 +221,13 @@ This will start:
    - Should see: `{"success": true, "message": "API is healthy", ...}`
 
 3. **Check Database Connection**: Look at server terminal
-   - Should see: "📊 MongoDB Connected: ..."
+   - Should see: "MongoDB Connected: ..."
 
 4. **Test Google Login**: 
    - Click "Login" button
    - Should redirect to Google OAuth (will fail until backend auth is implemented)
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Common Issues & Solutions
 
@@ -280,14 +280,14 @@ npm run install:all
 4. **Run as Administrator** if you get permission errors
 5. **Check Windows Defender/Antivirus** - may block MongoDB or Node.js
 
-## 🔑 Important Security Notes
+## Important Security Notes
 
 - **Never commit `.env` files** to Git (they're in `.gitignore`)
 - **Use strong JWT secrets** (minimum 32 characters)
 - **Keep Google OAuth secrets private**
 - **Use HTTPS in production**
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Tech-Talk/
@@ -310,43 +310,43 @@ Tech-Talk/
 └── package.json           # Root package.json
 ```
 
-## 🏗️ Development Milestones
+## Development Milestones
 
-### ✅ Milestone 1: Bootstrap & Architecture (Days 1-2)
+### Milestone 1: Bootstrap & Architecture (Days 1-2) - COMPLETED
 - [x] Monorepo setup with client/server
 - [x] React + Vite + Tailwind + MUI integration
 - [x] Basic routing and layout
 - [x] Express server with health endpoint
 - [x] Shared UI components foundation
 
-### 🚧 Milestone 2: Auth & Data Layer (Days 3-4)
+### Milestone 2: Auth & Data Layer (Days 3-4) - IN PROGRESS
 - [ ] MongoDB Atlas integration
 - [ ] User model and JWT authentication
 - [ ] Google OAuth 2.0 flow
 - [ ] Auth middleware and /api/me endpoint
 - [ ] Frontend auth context and guards
 
-### 🔜 Milestone 3: Profiles & Blog MVP (Days 5-7)
+### Milestone 3: Profiles & Blog MVP (Days 5-7) - PLANNED
 - [ ] User profile schema and API
 - [ ] Profile UI (view/edit)
 - [ ] Blog post model and CRUD API
 - [ ] Voting and rating system
 - [ ] Blog UI with create/read/vote functionality
 
-### 🔜 Milestone 4: Project Primers (Days 8-10)
+### Milestone 4: Project Primers (Days 8-10) - PLANNED
 - [ ] Project primer model and API
 - [ ] Frontend form for creating primers
 - [ ] Technology stack management
 - [ ] Integration with user profiles
 
-### 🔜 Milestone 5: Deployment & Open Source (Days 11-14)
+### Milestone 5: Deployment & Open Source (Days 11-14) - PLANNED
 - [ ] Heroku deployment setup
 - [ ] MongoDB Atlas add-on configuration
 - [ ] CI/CD pipeline (GitHub Actions)
 - [ ] Security audit and performance optimization
 - [ ] Open source documentation and contribution guidelines
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run all tests
@@ -359,7 +359,7 @@ npm run client:test
 npm run server:test
 ```
 
-## 🚀 Production Deployment
+## Production Deployment
 
 ### Heroku Deployment
 
@@ -381,7 +381,7 @@ npm run server:test
    git push heroku main
    ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
@@ -389,15 +389,15 @@ npm run server:test
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Contributors
+## Contributors
 
 - Tech Talk Community
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Material UI team for the excellent component library
 - Tailwind CSS for the utility-first CSS framework
@@ -405,4 +405,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ by the Tech Talk Community**
+**Built by the Tech Talk Community**
