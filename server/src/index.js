@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import { connectDB } from './config/database.js';
+// import { connectDB } from './config/database.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 // Import routes
@@ -15,10 +15,10 @@ import healthRoutes from './routes/health.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3002;
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB - Coming soon in database milestone
+// connectDB();
 
 // Middleware
 app.use(helmet());

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Container, Typography, Grid, Link, IconButton } from '@mui/material';
 import { GitHub, LinkedIn, Twitter, Email, FlashOn, Favorite } from '@mui/icons-material';
+import { HealthStatus } from '../';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -179,21 +180,27 @@ const Footer = () => {
 
         {/* Copyright Section */}
         <Box className="border-t border-white/10 mt-8 pt-6">
-          <Typography 
-            variant="body2" 
-            align="center" 
-            className="text-gray-400"
-            sx={{ 
-              '& span': {
-                background: 'linear-gradient(135deg, #00D4FF 0%, #FF6B35 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }
-            }}
-          >
-            © {currentYear} <span>TechTalk Alumni Network</span>. Built with <Favorite className="inline text-red-400 mx-1" fontSize="small" /> by FSU developers, for FSU developers.
-          </Typography>
+          <div className="flex flex-col items-center space-y-3">
+            {/* System Status */}
+            <HealthStatus />
+            
+            {/* Copyright */}
+            <Typography 
+              variant="body2" 
+              align="center" 
+              className="text-gray-400"
+              sx={{ 
+                '& span': {
+                  background: 'linear-gradient(135deg, #00D4FF 0%, #FF6B35 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }
+              }}
+            >
+              © {currentYear} <span>TechTalk Alumni Network</span>. Built with <Favorite className="inline text-red-400 mx-1" fontSize="small" /> by FSU developers, for FSU developers.
+            </Typography>
+          </div>
         </Box>
       </Container>
     </Box>

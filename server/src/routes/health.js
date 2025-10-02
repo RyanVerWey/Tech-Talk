@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -8,14 +7,19 @@ const router = express.Router();
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-    
     res.json({
       success: true,
       message: 'API is healthy',
       timestamp: new Date().toISOString(),
-      database: dbStatus,
+      database: {
+        status: 'pending',
+        message: 'Database integration coming soon'
+      },
       environment: process.env.NODE_ENV || 'development',
+      uptime: process.uptime(),
+      version: process.env.npm_package_version || '1.0.0',
+      memory: process.memoryUsage(),
+      pid: process.pid
     });
   } catch (error) {
     res.status(500).json({

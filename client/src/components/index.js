@@ -7,6 +7,7 @@ export { default as Footer } from './Layout/Footer';
 export { default as PageTitle } from './UI/PageTitle';
 export { default as LoadingButton } from './UI/LoadingButton';
 export { default as NotificationBar } from './UI/NotificationBar';
+export { default as HealthStatus } from './UI/HealthStatus';
 export { 
   default as LoadingSkeleton,
   CardSkeleton,
