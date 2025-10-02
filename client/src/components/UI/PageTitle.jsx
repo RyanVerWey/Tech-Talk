@@ -1,0 +1,38 @@
+import React from 'react';
+import { Typography, Box } from '@mui/material';
+
+const PageTitle = ({ 
+  title, 
+  subtitle, 
+  className = '', 
+  align = 'left',
+  variant = 'h3',
+  gutterBottom = true 
+}) => {
+  return (
+    <Box className={`mb-6 ${className}`}>
+      <Typography 
+        variant={variant} 
+        component="h1" 
+        align={align}
+        gutterBottom={gutterBottom}
+        className="font-bold text-gray-800"
+      >
+        {title}
+      </Typography>
+      {subtitle && (
+        <Typography 
+          variant="h6" 
+          component="p" 
+          align={align}
+          color="text.secondary"
+          className="text-gray-600"
+        >
+          {subtitle}
+        </Typography>
+      )}
+    </Box>
+  );
+};
+
+export default PageTitle;

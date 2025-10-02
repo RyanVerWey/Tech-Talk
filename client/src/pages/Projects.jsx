@@ -1,0 +1,39 @@
+import React from 'react';
+import { Typography, Container, Paper, Button, Box } from '@mui/material';
+import { Add } from '@mui/icons-material';
+
+const Projects = () => {
+  return (
+    <Container maxWidth="lg">
+      <Box className="flex justify-between items-center mb-6">
+        <Typography variant="h3" component="h1" gutterBottom>
+          Project Primers
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          className="bg-green-600 hover:bg-green-700"
+        >
+          New Project
+        </Button>
+      </Box>
+
+      <Paper className="p-8 text-center">
+        <Typography variant="h5" component="h2" gutterBottom>
+          Coming Soon
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          The project primers feature will be available soon. You'll be able to:
+        </Typography>
+        <ul className="mt-4 text-left max-w-md mx-auto">
+          <li>• Create and share project ideas</li>
+          <li>• Specify project concepts and timelines</li>
+          <li>• List required and optional technologies</li>
+          <li>• Collaborate with other alumni</li>
+        </ul>
+      </Paper>
+    </Container>
+  );
+};
+
+export default Projects;
