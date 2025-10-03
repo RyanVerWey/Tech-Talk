@@ -12,7 +12,7 @@ export const generateTokens = async (userId) => {
     const accessToken = jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '24h' }
     );
 
     const refreshToken = jwt.sign(
@@ -33,7 +33,7 @@ export const generateTokens = async (userId) => {
     return {
       accessToken,
       refreshToken,
-      expiresIn: 15 * 60
+      expiresIn: 24 * 60 * 60
     };
   } catch (error) {
     throw new Error('Token generation failed');
