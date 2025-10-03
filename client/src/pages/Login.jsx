@@ -4,8 +4,8 @@ import { Google } from '@mui/icons-material';
 
 const Login = () => {
   const handleGoogleLogin = () => {
-    // Redirect to Google OAuth endpoint
-    window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/google`;
+    const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? window.location.origin : 'http://localhost:3002');
+    window.location.href = `${apiUrl}/api/auth/google`;
   };
 
   return (

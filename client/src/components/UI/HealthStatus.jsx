@@ -10,7 +10,8 @@ const HealthStatus = ({ className = '' }) => {
   const fetchHealthStatus = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3002'}/api/health`);
+      const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? window.location.origin : 'http://localhost:3002');
+      const response = await fetch(`${apiUrl}/api/health`);
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);

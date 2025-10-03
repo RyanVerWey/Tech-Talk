@@ -4,7 +4,8 @@ import { AuthContext } from './AuthContext.js';
 
 // Configure axios defaults
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? window.location.origin : 'http://localhost:3002');
+axios.defaults.baseURL = apiUrl;
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
