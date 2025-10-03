@@ -148,6 +148,7 @@ router.put('/',
       .isLength({ max: 100 })
       .withMessage('City must be 100 characters or less')
   ],
+  authenticateToken,
   async (req, res) => {
     try {
       console.log('Profile update request received:', {
