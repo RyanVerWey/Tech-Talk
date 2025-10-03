@@ -76,6 +76,18 @@ export const refreshAccessToken = async (refreshToken) => {
   }
 };
 
+export const revokeRefreshToken = async (refreshToken) => {
+  try {
+    await RefreshToken.findOneAndUpdate(
+      { token: refreshToken },
+      { isActive: false },
+      { new: true }
+    );
+  } catch (error) {
+    throw new Error('Token revocation failed');
+  }
+};
+
 export const cleanupExpiredTokens = async () => {
   try {
     const result = await RefreshToken.deleteMany({
