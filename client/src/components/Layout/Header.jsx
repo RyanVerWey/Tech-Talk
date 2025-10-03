@@ -105,9 +105,13 @@ const Header = () => {
           {user ? (
             <Box className="flex items-center space-x-3">
               <img
-                src={user.avatar || `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=00D4FF&color=fff`}
+                src={user.avatar || user.picture || `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=00D4FF&color=fff`}
                 alt={user.displayName || `${user.firstName} ${user.lastName}`}
                 className="w-8 h-8 rounded-full border-2 border-cyan-400 border-opacity-60"
+                onError={(e) => {
+                  console.log('Avatar failed to load, user data:', user);
+                  e.target.src = `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=00D4FF&color=fff`;
+                }}
               />
               {!isMobile && (
                 <Typography variant="body2" className="text-white font-medium">

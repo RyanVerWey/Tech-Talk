@@ -104,6 +104,7 @@ function App() {
               <Layout>
                 <Routes>
                   <Route path="/login" element={<Login />} />
+                  <Route path="/auth/callback" element={<Login />} />
                   <Route path="/" element={
                     <ProtectedRoute>
                       <Home />

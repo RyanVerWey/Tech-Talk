@@ -13,17 +13,32 @@ const AuthProvider = ({ children }) => {
 
   // Check if user is authenticated on app load and handle OAuth callback
   useEffect(() => {
-    checkAuth();
-    
     // Handle OAuth callback by checking for access token in URL
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get('token');
+    const userData = urlParams.get('user');
+    
     if (accessToken) {
-      // Store token and remove from URL
+      // Store token and user data
       localStorage.setItem('accessToken', accessToken);
-      window.history.replaceState({}, document.title, window.location.pathname);
-      checkAuth();
+      if (userData) {
+        try {
+          const parsedUser = JSON.parse(decodeURIComponent(userData));
+          console.log('OAuth user data received:', parsedUser);
+          setUser(parsedUser);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+        }
+      }
+      
+      // Redirect to home page and remove tokens from URL
+      window.history.replaceState({}, document.title, '/');
+      window.location.href = '/';
+      return;
     }
+    
+    checkAuth();
   }, []);
 
   const checkAuth = async () => {
@@ -35,6 +50,7 @@ const AuthProvider = ({ children }) => {
       
       const response = await axios.get('/api/auth/me');
       if (response.data.success) {
+        console.log('API user data received:', response.data.data);
         setUser(response.data.data);
       } else {
         setUser(null);
@@ -43,6 +59,7 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       // User is not authenticated - this is expected behavior
+      console.log('Authentication check failed:', error.response?.status === 401 ? 'Token invalid/expired' : error.message);
       setUser(null);
       localStorage.removeItem('accessToken');
       delete axios.defaults.headers.common['Authorization'];
