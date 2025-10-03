@@ -13,6 +13,7 @@ import { cleanupExpiredTokens } from './utils/auth.js';
 
 import authRoutes from './routes/auth.js';
 import healthRoutes from './routes/health.js';
+import profileRoutes from './routes/profile.js';
 
 dotenv.config();
 
@@ -56,6 +57,8 @@ app.use(passport.session());
 
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api', profileRoutes); // For /api/users/:id endpoint
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(process.cwd(), '../client/dist')));
