@@ -68,13 +68,29 @@ const Profiles = () => {
     }
   };
 
-  // Calculate dynamic stats from alumni data
+  // Calculate dynamic stats from alumni data - SIMPLIFIED FOR DEBUGGING
   const stats = {
     members: alumni.length,
-    companies: new Set(alumni.filter(a => a.company).map(a => a.company)).size,
-    cities: new Set(alumni.filter(a => a.location?.city).map(a => a.location.city)).size,
-    graduationYears: new Set(alumni.filter(a => a.graduationYear).map(a => a.graduationYear)).size
+    companies: 0, // Temporarily disabled
+    cities: 0,    // Temporarily disabled  
+    graduationYears: 0 // Temporarily disabled
   };
+
+  // Debug logging - Remove this after fixing
+  if (alumni.length > 0) {
+    console.log('=== DEBUGGING ALUMNI DATA ===');
+    console.log('Total alumni records:', alumni.length);
+    alumni.forEach((alum, index) => {
+      console.log(`Alumni ${index + 1}:`, {
+        name: alum.displayName || `${alum.firstName} ${alum.lastName}`,
+        company: alum.company,
+        city: alum.location?.city,
+        graduationYear: alum.graduationYear,
+        hasJoinedNetwork: alum.hasJoinedNetwork
+      });
+    });
+    console.log('=== END DEBUG ===');
+  }
 
   const handleProfileClick = (profile) => {
     console.log('Profile clicked:', profile);
