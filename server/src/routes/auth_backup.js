@@ -1,11 +1,14 @@
 import express from 'express';
 import passport from '../config/passport.js';
-import { generateTokens, refreshAccessToken, revokeRefreshToken } from '../utils/auth.js';
-import { authenticateToken } from '../middleware/auth.js';
+import { generateTokens, refreshAccessToken, revokeRefreshToken, revokeAllUserTokens } from '../utils/auth.js';
+import { authenticateToken, authRateLimit } from '../middleware/auth.js';
 import User from '../models/User.js';
 
 const router = express.Router();
 
+// @desc    Initiate Google OAuth
+// @route   GET /api/auth/google
+// @access  Public
 router.get('/google', 
   passport.authenticate('google', { 
     scope: ['profile', 'email'] 
@@ -22,6 +25,14 @@ router.get('/google/callback',
       // Generate JWT tokens
       const tokens = await generateTokens(req.user);
       
+      // Set secure HTTP-only cookie for refresh token
+      res.cookie('refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      });
+
       // Redirect to client with access token
       const clientURL = process.env.CLIENT_URL || 'http://localhost:5173';
       const redirectURL = `${clientURL}/auth/callback?token=${tokens.accessToken}&user=${encodeURIComponent(JSON.stringify({
@@ -42,6 +53,9 @@ router.get('/google/callback',
   }
 );
 
+// @desc    Get current user
+// @route   GET /api/auth/me
+// @access  Private
 router.get('/me', authenticateToken, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-__v');
@@ -59,62 +73,31 @@ router.get('/me', authenticateToken, async (req, res) => {
     });
   }
 });
-
-router.post('/refresh', async (req, res) => {
-  try {
-    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
-    
-    if (!refreshToken) {
-      return res.status(401).json({
-        success: false,
-        message: 'Refresh token required'
-      });
-    }
-
-    const tokens = await refreshAccessToken(refreshToken);
-    
-    res.json({
-      success: true,
-      data: tokens,
-      message: 'Token refreshed successfully'
-    });
-  } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: 'Invalid or expired refresh token'
-    });
-  }
+  res.json({
+    success: false,
+    message: 'Google OAuth not yet implemented'
+  });
 });
 
-router.post('/logout', authenticateToken, async (req, res) => {
-  try {
-    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
-    
-    if (refreshToken) {
-      await revokeRefreshToken(refreshToken);
-    }
-    
-    res.json({
-      success: true,
-      message: 'Logged out successfully'
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error during logout'
-    });
-  }
+// @desc    Google OAuth callback
+// @route   GET /api/auth/google/callback
+// @access  Public
+router.get('/google/callback', (req, res) => {
+  // TODO: Implement Google OAuth callback
+  res.json({
+    success: false,
+    message: 'Google OAuth callback not yet implemented'
+  });
 });
 
-router.get('/status', (req, res) => {
+// @desc    Logout user
+// @route   POST /api/auth/logout
+// @access  Private
+router.post('/logout', (req, res) => {
+  // TODO: Implement logout
   res.json({
     success: true,
-    data: {
-      googleAuth: !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET),
-      jwtSecret: !!process.env.JWT_SECRET,
-      environment: process.env.NODE_ENV || 'development'
-    },
-    message: 'Authentication service status'
+    message: 'Logged out successfully'
   });
 });
 

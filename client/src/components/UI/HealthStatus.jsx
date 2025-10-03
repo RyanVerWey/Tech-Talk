@@ -38,23 +38,24 @@ const HealthStatus = ({ className = '' }) => {
   const getStatusColor = () => {
     if (loading) return 'default';
     if (error) return 'error';
-    if (health?.success && health?.database === 'connected') return 'success';
-    return 'warning';
+    if (health?.success && health?.database?.connected) return 'success';
+    if (health?.success) return 'warning';
+    return 'error';
   };
 
   const getStatusIcon = () => {
     if (loading) return null;
     if (error) return <Error fontSize="small" />;
-    if (health?.success && health?.database === 'connected') return <CheckCircle fontSize="small" />;
+    if (health?.success && health?.database?.connected) return <CheckCircle fontSize="small" />;
     return <Warning fontSize="small" />;
   };
 
   const getStatusText = () => {
     if (loading) return 'Checking...';
     if (error) return 'API Offline';
-    if (health?.success && health?.database === 'connected') return 'All Systems Operational';
-    if (health?.success) return 'API Online, DB Issues';
-    return 'Unknown Status';
+    if (health?.success && health?.database?.connected) return 'All Systems Operational';
+    if (health?.success) return `API Online, DB ${health.database?.state || 'Unknown'}`;
+    return 'System Error';
   };
 
   return (
@@ -76,8 +77,15 @@ const HealthStatus = ({ className = '' }) => {
             Environment: {health.environment}
           </Typography>
           <Typography variant="caption" display="block">
-            Database: {health.database}
+            Database: {health.database?.connected ? 
+              `${health.database.state} (${health.database.host})` : 
+              health.database?.state || 'Unknown'}
           </Typography>
+          {health.database?.collections !== undefined && (
+            <Typography variant="caption" display="block">
+              Collections: {health.database.collections}
+            </Typography>
+          )}
           <Typography variant="caption" display="block">
             Last check: {new Date(health.timestamp).toLocaleString()}
           </Typography>

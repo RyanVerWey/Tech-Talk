@@ -1,0 +1,43 @@
+{
+  "name": "techtalk-alumni-network",
+  "description": "FSU Computer Science Alumni Network - Connect, Share, Grow",
+  "repository": "https://github.com/RyanVerWey/Tech-Talk",
+  "logo": "https://fsu.edu/favicon.ico",
+  "keywords": ["alumni", "network", "fsu", "computer-science", "react", "express", "mongodb"],
+  "stack": "heroku-22",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Application environment",
+      "value": "production"
+    },
+    "MONGODB_URI": {
+      "description": "MongoDB Atlas connection string",
+      "required": true
+    },
+    "GOOGLE_CLIENT_ID": {
+      "description": "Google OAuth Client ID",
+      "required": true
+    },
+    "GOOGLE_CLIENT_SECRET": {
+      "description": "Google OAuth Client Secret",
+      "required": true
+    },
+    "JWT_SECRET": {
+      "description": "JWT signing secret (generate a strong random string)",
+      "generator": "secret"
+    },
+    "SESSION_SECRET": {
+      "description": "Session signing secret (generate a strong random string)",
+      "generator": "secret"
+    },
+    "CLIENT_URL": {
+      "description": "Frontend application URL",
+      "required": true
+    }
+  }
+}

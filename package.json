@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
+    "start": "cd server && npm start",
+    "build": "npm run server:install && npm run client:build",
+    "heroku-prebuild": "npm run server:install",
     "client:dev": "cd client && npm run dev",
     "server:dev": "cd server && npm run dev",
     "client:build": "cd client && npm run build",
@@ -22,6 +25,10 @@
   "keywords": ["alumni", "networking", "react", "vite", "tailwind", "material-ui", "mongodb"],
   "author": "Tech Talk Group",
   "license": "MIT",
+  "engines": {
+    "node": "20.x",
+    "npm": ">=8.0.0"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
