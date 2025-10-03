@@ -686,16 +686,16 @@ Tech-Talk/
 - [x] Express server with health endpoint
 - [x] Shared UI components foundation
 
-### Milestone 2: Auth & Data Layer (Days 3-4) - IN PROGRESS
-- [ ] MongoDB Atlas integration
-- [ ] User model and JWT authentication
-- [ ] Google OAuth 2.0 flow
-- [ ] Auth middleware and /api/me endpoint
-- [ ] Frontend auth context and guards
+### Milestone 2: Auth & Data Layer (Days 3-4) - COMPLETED
+- [x] MongoDB Atlas integration
+- [x] User model and JWT authentication
+- [x] Google OAuth 2.0 flow
+- [x] Auth middleware and /api/me endpoint
+- [x] Frontend auth context and guards
 
-### Milestone 3: Profiles & Blog MVP (Days 5-7) - PLANNED
-- [ ] User profile schema and API
-- [ ] Profile UI (view/edit)
+### Milestone 3: Profiles & Blog MVP (Days 5-7) - In Progress
+- [x] User profile schema and API
+- [x] Profile UI (view/edit)
 - [ ] Blog post model and CRUD API
 - [ ] Voting and rating system
 - [ ] Blog UI with create/read/vote functionality
@@ -706,12 +706,12 @@ Tech-Talk/
 - [ ] Technology stack management
 - [ ] Integration with user profiles
 
-### Milestone 5: Deployment & Open Source (Days 11-14) - PLANNED
-- [ ] Heroku deployment setup
-- [ ] MongoDB Atlas add-on configuration
-- [ ] CI/CD pipeline (GitHub Actions)
+### Milestone 5: Deployment & Open Source (Days 11-14) - In Progress
+- [x] Heroku deployment setup
+- [x] MongoDB Atlas add-on configuration
+- [x] CI/CD pipeline (GitHub Actions)
 - [ ] Security audit and performance optimization
-- [ ] Open source documentation and contribution guidelines
+- [x] Open source documentation and contribution guidelines
 
 ## Testing
 
