@@ -12,29 +12,24 @@ import {
 import { Home, Article, People, Work, Login, Menu, FlashOn } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts';
-
 const Header = () => {
   const location = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
   const navItems = [
     { label: 'Home', path: '/', icon: Home },
     { label: 'Blog', path: '/blog', icon: Article },
     { label: 'Profiles', path: '/profiles', icon: People },
     { label: 'Projects', path: '/projects', icon: Work },
   ];
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
   const isActivePath = (path) => {
     return location.pathname === path;
   };
-
   return (
     <AppBar 
       position="static" 
@@ -46,7 +41,7 @@ const Header = () => {
       }}
     >
       <Toolbar className="px-6 py-2">
-        {/* Logo/Brand */}
+        {}
         <Typography 
           variant="h6" 
           component={Link}
@@ -67,8 +62,7 @@ const Header = () => {
           <FlashOn className="text-cyan-400" />
           TechTalk
         </Typography>
-        
-        {/* Desktop Navigation */}
+        {}
         {!isMobile && isAuthenticated && (
           <Box className="flex items-center space-x-2">
             {navItems.map((item) => {
@@ -99,13 +93,12 @@ const Header = () => {
             })}
           </Box>
         )}
-
-        {/* Auth Section */}
+        {}
         <Box className="ml-4 flex items-center">
           {user ? (
             <Box className="flex items-center space-x-3">
               <img
-                src={user.avatar || user.picture || `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="#00D4FF"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="Arial" font-size="12">${user.firstName?.[0] || '?'}${user.lastName?.[0] || ''}</text></svg>`)}`}
+                src={user.avatar || user.picture || `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#00D4FF"/><text x="50" y="55" text-anchor="middle" fill="white" font-size="20">${(user.displayName || user.firstName || 'U').charAt(0).toUpperCase()}</text></svg>`)}`}
                 alt={user.displayName || `${user.firstName} ${user.lastName}`}
                 className="w-8 h-8 rounded-full border-2 border-cyan-400 border-opacity-60"
               />
@@ -137,8 +130,7 @@ const Header = () => {
             </Button>
           )}
         </Box>
-
-        {/* Mobile Menu Button */}
+        {}
         {isMobile && (
           <IconButton
             color="inherit"
@@ -151,10 +143,8 @@ const Header = () => {
           </IconButton>
         )}
       </Toolbar>
-
-      {/* Mobile Navigation Drawer would go here - implement when needed */}
+      {}
     </AppBar>
   );
 };
-
 export default Header;

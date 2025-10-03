@@ -16,7 +16,6 @@ import {
 import { GitHub, LinkedIn, Launch, Save, Cancel } from '@mui/icons-material';
 import { useAuth } from '../../contexts';
 import axios from 'axios';
-
 const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
   const { user: currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -35,8 +34,6 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
       linkedin: ''
     }
   });
-
-  // Initialize form data when dialog opens
   useEffect(() => {
     if (open && user) {
       setFormData({
@@ -56,7 +53,6 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
       setSuccess('');
     }
   }, [open, user]);
-
   const handleInputChange = (field, value) => {
     if (field.startsWith('socialLinks.')) {
       const socialField = field.split('.')[1];
@@ -74,14 +70,10 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
       }));
     }
   };
-
   const validateForm = () => {
     const errors = [];
-    
     if (!formData.firstName.trim()) errors.push('First name is required');
     if (!formData.lastName.trim()) errors.push('Last name is required');
-    
-    // Validate URLs
     const urlFields = ['portfolio', 'github', 'linkedin'];
     urlFields.forEach(field => {
       const url = formData.socialLinks[field];
@@ -89,8 +81,6 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
         errors.push(`${field} must be a valid URL starting with http:// or https://`);
       }
     });
-
-    // Validate graduation year
     if (formData.graduationYear) {
       const year = parseInt(formData.graduationYear);
       const currentYear = new Date().getFullYear();
@@ -98,10 +88,8 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
         errors.push('Please enter a valid graduation year');
       }
     }
-
     return errors;
   };
-
   const isValidUrl = (url) => {
     try {
       new URL(url);
@@ -110,28 +98,21 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
       return false;
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       setError(validationErrors.join('. '));
       return;
     }
-
     setLoading(true);
     setError('');
     setSuccess('');
-
     try {
       const response = await axios.put('/api/profile', formData);
-      
       if (response.data.success) {
         setSuccess('Profile updated successfully!');
         onProfileUpdate?.(response.data.data);
-        
-        // Close dialog after brief success message
         setTimeout(() => {
           onClose();
           setSuccess('');
@@ -150,7 +131,6 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
       setLoading(false);
     }
   };
-
   const handleClose = () => {
     if (!loading) {
       onClose();
@@ -158,7 +138,6 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
       setSuccess('');
     }
   };
-
   return (
     <Dialog 
       open={open} 
@@ -190,12 +169,10 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
           </div>
         </div>
       </DialogTitle>
-
       <form onSubmit={handleSubmit}>
         <DialogContent className="bg-gradient-to-br from-gray-900 to-gray-800">
           <Box className="space-y-6 pt-4">
-            
-            {/* Error/Success Messages */}
+            {}
             {error && (
               <Alert severity="error" className="bg-red-900/20 border border-red-500/30 text-red-300">
                 {error}
@@ -206,8 +183,7 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                 {success}
               </Alert>
             )}
-
-            {/* Basic Information */}
+            {}
             <Box>
               <Typography variant="h6" className="text-white mb-3">
                 Basic Information
@@ -279,8 +255,7 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                 </Grid>
               </Grid>
             </Box>
-
-            {/* Academic Information */}
+            {}
             <Box>
               <Typography variant="h6" className="text-white mb-3">
                 Academic Information
@@ -318,11 +293,9 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                     }}
                   />
                 </Grid>
-
               </Grid>
             </Box>
-
-            {/* Social Links */}
+            {}
             <Box>
               <Typography variant="h6" className="text-white mb-3">
                 Social Links
@@ -367,7 +340,7 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                     onChange={(e) => handleInputChange('socialLinks.linkedin', e.target.value)}
                     fullWidth
                     variant="outlined"
-                    placeholder="https://linkedin.com/in/yourusername"
+                    placeholder="https://www.linkedin.com/in/ryan-verwey/"
                     InputProps={{
                       startAdornment: <LinkedIn className="text-blue-400 mr-2" />,
                       className: 'text-white',
@@ -380,7 +353,6 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
             </Box>
           </Box>
         </DialogContent>
-
         <DialogActions className="bg-gradient-to-br from-gray-900 to-gray-800 border-t border-white/10 p-6">
           <Button
             onClick={handleClose}
@@ -404,5 +376,4 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
     </Dialog>
   );
 };
-
 export default ProfileEditDialog;

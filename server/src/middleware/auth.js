@@ -1,71 +1,40 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-
-// Middleware to authenticate JWT tokens
 export const authenticateToken = async (req, res, next) => {
   try {
-    console.log('🔐 Auth middleware started');
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
-    console.log('🔐 Auth check:', {
-      hasAuthHeader: !!authHeader,
-      hasToken: !!token,
-      tokenPrefix: token ? token.substring(0, 20) + '...' : 'none'
-    });
-
+    const token = authHeader && authHeader.split(' ')[1];
     if (!token) {
-      console.log('🔐 No token provided');
       return res.status(401).json({
         success: false,
         message: 'Access token required'
       });
     }
-
-    // Verify token
-    console.log('🔐 Verifying token...');
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('🔐 Token verified successfully:', { userId: decoded.userId, type: decoded.type });
-    
-    // Get user from database
-    console.log('🔐 Looking up user:', decoded.userId);
     const user = await User.findById(decoded.userId).select('-__v');
-    console.log('🔐 User lookup result:', { found: !!user, isActive: user?.isActive });
-    
     if (!user || !user.isActive) {
-      console.log('🔐 User not found or inactive');
       return res.status(401).json({
         success: false,
         message: 'Invalid token or user not active'
       });
     }
-
-    // Add user to request object
     req.user = user;
-    console.log('🔐 Auth successful, user set:', { userId: user._id, email: user.email });
     next();
-    
   } catch (error) {
-    console.log('🔐 Auth error:', { name: error.name, message: error.message });
-    
     if (error.name === 'TokenExpiredError') {
-      console.log('🔐 Token expired');
       return res.status(401).json({
         success: false,
         message: 'Token expired',
         code: 'TOKEN_EXPIRED'
       });
     }
-    
     if (error.name === 'JsonWebTokenError') {
-      console.log('🔐 Invalid token format');
       return res.status(401).json({
         success: false,
         message: 'Invalid token',
         code: 'INVALID_TOKEN'
       });
     }
-
     return res.status(500).json({
       success: false,
       message: 'Authentication error',
@@ -73,30 +42,22 @@ export const authenticateToken = async (req, res, next) => {
     });
   }
 };
-
-// Middleware for optional authentication (user may or may not be logged in)
 export const optionalAuth = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
-
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(decoded.userId).select('-__v');
-      
       if (user && user.isActive) {
         req.user = user;
       }
     }
-    
     next();
   } catch (error) {
-    // Continue without user if token is invalid
     next();
   }
 };
-
-// Role-based authorization middleware
 export const requireRole = (roles) => {
   return (req, res, next) => {
     if (!req.user) {
@@ -105,12 +66,9 @@ export const requireRole = (roles) => {
         message: 'Authentication required'
       });
     }
-
     const userRoles = Array.isArray(req.user.role) ? req.user.role : [req.user.role];
     const requiredRoles = Array.isArray(roles) ? roles : [roles];
-    
     const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role));
-    
     if (!hasRequiredRole) {
       return res.status(403).json({
         success: false,
@@ -119,12 +77,9 @@ export const requireRole = (roles) => {
         current: userRoles
       });
     }
-
     next();
   };
 };
-
-// Middleware to check if user owns resource or is admin
 export const requireOwnershipOrAdmin = (resourceUserIdField = 'author') => {
   return (req, res, next) => {
     if (!req.user) {
@@ -133,27 +88,19 @@ export const requireOwnershipOrAdmin = (resourceUserIdField = 'author') => {
         message: 'Authentication required'
       });
     }
-
-    // Admin can access everything
     if (req.user.role === 'admin') {
       return next();
     }
-
-    // Check ownership based on the resource
     const resourceUserId = req.resource?.[resourceUserIdField] || req.params.userId;
-    
     if (resourceUserId && resourceUserId.toString() === req.user._id.toString()) {
       return next();
     }
-
     return res.status(403).json({
       success: false,
       message: 'Access denied: insufficient permissions'
     });
   };
 };
-
-// Middleware to check if user profile is complete enough for certain actions
 export const requireCompleteProfile = (minCompleteness = 50) => {
   return (req, res, next) => {
     if (!req.user) {
@@ -162,9 +109,7 @@ export const requireCompleteProfile = (minCompleteness = 50) => {
         message: 'Authentication required'
       });
     }
-
     const completeness = req.user.profileCompleteness;
-    
     if (completeness < minCompleteness) {
       return res.status(403).json({
         success: false,
@@ -174,29 +119,20 @@ export const requireCompleteProfile = (minCompleteness = 50) => {
         code: 'INCOMPLETE_PROFILE'
       });
     }
-
     next();
   };
 };
-
-// Rate limiting middleware for authentication endpoints
 export const authRateLimit = (maxAttempts = 5, windowMs = 15 * 60 * 1000) => {
   const attempts = new Map();
-
   return (req, res, next) => {
     const key = req.ip;
     const now = Date.now();
-    
     if (!attempts.has(key)) {
       attempts.set(key, []);
     }
-
     const userAttempts = attempts.get(key);
-    
-    // Remove attempts outside the window
     const validAttempts = userAttempts.filter(time => now - time < windowMs);
     attempts.set(key, validAttempts);
-
     if (validAttempts.length >= maxAttempts) {
       return res.status(429).json({
         success: false,
@@ -204,10 +140,7 @@ export const authRateLimit = (maxAttempts = 5, windowMs = 15 * 60 * 1000) => {
         retryAfter: Math.ceil(windowMs / 1000)
       });
     }
-
-    // Add current attempt
     validAttempts.push(now);
-    
     next();
   };
 };

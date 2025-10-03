@@ -2,10 +2,8 @@ import React from 'react';
 import { Box, Container, Typography, Grid, Link, IconButton } from '@mui/material';
 import { GitHub, LinkedIn, Twitter, Email, FlashOn, Favorite } from '@mui/icons-material';
 import { HealthStatus } from '../';
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
   return (
     <Box
       component="footer"
@@ -17,15 +15,14 @@ const Footer = () => {
         borderTop: '1px solid rgba(255, 255, 255, 0.1)',
       }}
     >
-      {/* Animated background */}
+      {}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-32 h-32 bg-gradient-to-r from-cyan-400/10 to-blue-600/10 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-24 h-24 bg-gradient-to-r from-orange-400/10 to-pink-600/10 rounded-full blur-xl animate-pulse delay-1000"></div>
       </div>
-      
       <Container maxWidth="lg" className="relative z-10">
         <Grid container spacing={4}>
-          {/* Brand Section */}
+          {}
           <Grid item xs={12} sm={6} md={3}>
             <Typography 
               variant="h6" 
@@ -42,10 +39,9 @@ const Footer = () => {
               <FlashOn className="inline mr-1" /> TechTalk Alumni
             </Typography>
             <Typography variant="body2" className="text-gray-400 mb-6 leading-relaxed">
-              A network for FSU tech alumni. Share knowledge, connect with peers, and collaborate on meaningful projects.
+              A network for Full Sail tech alumni. Share knowledge, connect with peers, and collaborate on meaningful projects.
             </Typography>
-            
-            {/* Social Links */}
+            {}
             <Box className="flex space-x-2">
               <IconButton 
                 size="small" 
@@ -113,8 +109,7 @@ const Footer = () => {
               </IconButton>
             </Box>
           </Grid>
-
-          {/* Quick Links */}
+          {}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" component="h3" gutterBottom className="font-semibold">
               Quick Links
@@ -134,8 +129,7 @@ const Footer = () => {
               </Link>
             </Box>
           </Grid>
-
-          {/* Resources */}
+          {}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" component="h3" gutterBottom className="font-semibold">
               Resources
@@ -155,8 +149,7 @@ const Footer = () => {
               </Link>
             </Box>
           </Grid>
-
-          {/* Legal */}
+          {}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" component="h3" gutterBottom className="font-semibold">
               Legal
@@ -177,14 +170,12 @@ const Footer = () => {
             </Box>
           </Grid>
         </Grid>
-
-        {/* Copyright Section */}
+        {}
         <Box className="border-t border-white/10 mt-8 pt-6">
           <div className="flex flex-col items-center space-y-3">
-            {/* System Status */}
+            {}
             <HealthStatus />
-            
-            {/* Copyright */}
+            {}
             <Typography 
               variant="body2" 
               align="center" 
@@ -198,7 +189,7 @@ const Footer = () => {
                 }
               }}
             >
-              © {currentYear} <span>TechTalk Alumni Network</span>. Built with <Favorite className="inline text-red-400 mx-1" fontSize="small" /> by FSU developers, for FSU developers.
+              © {currentYear} <span>TechTalk Alumni Network</span>. Built with <Favorite className="inline text-red-400 mx-1" fontSize="small" /> by Full Sail developers, for Full Sail developers.
             </Typography>
           </div>
         </Box>
@@ -206,5 +197,4 @@ const Footer = () => {
     </Box>
   );
 };
-
 export default Footer;

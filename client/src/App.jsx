@@ -12,8 +12,6 @@ import Projects from './pages/Projects';
 import Login from './pages/Login';
 import { AuthProvider } from './contexts';
 import './App.css'
-
-// Create a modern theme instance
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -77,16 +75,13 @@ const theme = createTheme({
     },
   },
 });
-
-// Create a client for React Query
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000, // 1 minute
+      staleTime: 60 * 1000, 
     },
   },
 });
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -95,7 +90,7 @@ function App() {
         <AuthProvider>
           <Router>
             <div id="root" className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
-              {/* Animated background elements */}
+              {}
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
                 <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-orange-400/20 to-pink-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -134,5 +129,4 @@ function App() {
     </QueryClientProvider>
   )
 }
-
 export default App

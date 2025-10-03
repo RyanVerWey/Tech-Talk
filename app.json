@@ -1,9 +1,9 @@
 {
   "name": "techtalk-alumni-network",
-  "description": "FSU Computer Science Alumni Network - Connect, Share, Grow",
+  "description": "Full Sail Web Development Alumni Network - Connect, Share, Grow",
   "repository": "https://github.com/RyanVerWey/Tech-Talk",
-  "logo": "https://fsu.edu/favicon.ico",
-  "keywords": ["alumni", "network", "fsu", "computer-science", "react", "express", "mongodb"],
+  "logo": "https://www.fullsail.edu/favicon.ico",
+  "keywords": ["alumni", "network", "full-sail", "web-development", "react", "express", "mongodb"],
   "stack": "heroku-22",
   "buildpacks": [
     {

@@ -1,47 +1,1 @@
-import React from 'react';
-import { Rating, Box, Typography } from '@mui/material';
-import { Star, StarBorder } from '@mui/icons-material';
-
-const StarRating = ({
-  value = 0,
-  onChange,
-  readOnly = false,
-  size = 'medium',
-  precision = 1, // 0.5 for half stars, 1 for full stars
-  max = 5,
-  showValue = false,
-  className = '',
-  label,
-  emptyIcon = <StarBorder fontSize="inherit" />,
-  filledIcon = <Star fontSize="inherit" />
-}) => {
-  return (
-    <Box className={`flex items-center space-x-2 ${className}`}>
-      {label && (
-        <Typography variant="body2" component="span" className="font-medium">
-          {label}
-        </Typography>
-      )}
-      
-      <Rating
-        value={value}
-        onChange={onChange}
-        readOnly={readOnly}
-        size={size}
-        precision={precision}
-        max={max}
-        emptyIcon={emptyIcon}
-        icon={filledIcon}
-        className="text-yellow-500"
-      />
-      
-      {showValue && (
-        <Typography variant="body2" component="span" className="text-gray-600">
-          ({value}/{max})
-        </Typography>
-      )}
-    </Box>
-  );
-};
-
-export default StarRating;
+import React from 'react';import { Rating, Box, Typography } from '@mui/material';import { Star, StarBorder } from '@mui/icons-material';const StarRating = ({  value = 0,  onChange,  readOnly = false,  size = 'medium',  precision = 1,   max = 5,  showValue = false,  className = '',  label,  emptyIcon = <StarBorder fontSize="inherit" />,  filledIcon = <Star fontSize="inherit" />}) => {  return (    <Box className={`flex items-center space-x-2 ${className}`}>      {label && (        <Typography variant="body2" component="span" className="font-medium">          {label}        </Typography>      )}      <Rating        value={value}        onChange={onChange}        readOnly={readOnly}        size={size}        precision={precision}        max={max}        emptyIcon={emptyIcon}        icon={filledIcon}        className="text-yellow-500"      />      {showValue && (        <Typography variant="body2" component="span" className="text-gray-600">          ({value}/{max})        </Typography>      )}    </Box>  );};export default StarRating;

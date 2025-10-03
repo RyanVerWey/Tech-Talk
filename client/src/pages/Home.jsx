@@ -1,13 +1,12 @@
 import React from 'react';
 import { Typography, Container, Paper, Grid, Card, CardContent, Button } from '@mui/material';
 import { Article, People, Work, TrendingUp, RocketLaunch, MenuBook, FlashOn } from '@mui/icons-material';
-
 const Home = () => {
   return (
     <Container maxWidth="lg" className="relative z-10">
-      {/* Hero Section */}
+      {}
       <div className="relative overflow-hidden rounded-3xl p-12 mb-16 bg-gradient-to-r from-cyan-400/10 via-blue-600/10 to-purple-600/10 backdrop-blur-xl border border-white/20">
-        {/* Floating particles */}
+        {}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-[15%] left-[8%] w-1.5 h-1.5 bg-cyan-400/60 rounded-full animate-slow-ping" style={{animationDelay: '0s'}}></div>
           <div className="absolute top-[25%] right-[12%] w-1 h-1 bg-orange-400/50 rounded-full animate-slow-ping" style={{animationDelay: '1.2s'}}></div>
@@ -17,7 +16,6 @@ const Home = () => {
           <div className="absolute top-[60%] left-[15%] w-1 h-1 bg-purple-400/40 rounded-full animate-slow-ping" style={{animationDelay: '3.2s'}}></div>
           <div className="absolute bottom-[45%] left-[45%] w-1.5 h-1.5 bg-cyan-400/35 rounded-full animate-slow-ping" style={{animationDelay: '2.8s'}}></div>
         </div>
-        
         <div className="relative z-10 text-center">
           <Typography 
             variant="h1" 
@@ -33,18 +31,16 @@ const Home = () => {
               animation: 'gradientShift 3s ease-in-out infinite',
             }}
           >
-            FSU Tech Talk
+            Full Sail Tech Talk
             <br />
             <span className="relative">
               Alumni Network
               <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 to-orange-400 rounded-full"></div>
             </span>
           </Typography>
-          
           <Typography variant="h5" component="p" className="mb-8 text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Connect with fellow FSU developers, share real-world insights, and collaborate on projects that matter.
+            Connect with fellow Full Sail developers, share real-world insights, and collaborate on projects that matter.
           </Typography>
-          
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
               variant="contained"
@@ -65,15 +61,13 @@ const Home = () => {
           </div>
         </div>
       </div>
-
-      {/* Feature Cards */}
+      {}
       <Grid container spacing={6} className="mb-16">
         <Grid item xs={12} md={4}>
           <Card className="h-full bg-gradient-to-br from-cyan-400/5 to-blue-600/5 border border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-400/20 group cursor-pointer">
             <CardContent className="text-center p-8 relative overflow-hidden">
-              {/* Background glow */}
+              {}
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/0 to-blue-600/0 group-hover:from-cyan-400/5 group-hover:to-blue-600/5 transition-all duration-500"></div>
-              
               <div className="relative z-10">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center group-hover:rotate-12 transition-transform duration-500">
                   <Article className="text-black text-3xl" />
@@ -88,12 +82,10 @@ const Home = () => {
             </CardContent>
           </Card>
         </Grid>
-        
         <Grid item xs={12} md={4}>
           <Card className="h-full bg-gradient-to-br from-orange-400/5 to-pink-600/5 border border-orange-400/20 hover:border-orange-400/40 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-orange-400/20 group cursor-pointer">
             <CardContent className="text-center p-8 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-400/0 to-pink-600/0 group-hover:from-orange-400/5 group-hover:to-pink-600/5 transition-all duration-500"></div>
-              
               <div className="relative z-10">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-orange-400 to-pink-600 flex items-center justify-center group-hover:rotate-12 transition-transform duration-500">
                   <People className="text-black text-3xl" />
@@ -108,12 +100,10 @@ const Home = () => {
             </CardContent>
           </Card>
         </Grid>
-        
         <Grid item xs={12} md={4}>
           <Card className="h-full bg-gradient-to-br from-purple-400/5 to-violet-600/5 border border-purple-400/20 hover:border-purple-400/40 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-400/20 group cursor-pointer">
             <CardContent className="text-center p-8 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-400/0 to-violet-600/0 group-hover:from-purple-400/5 group-hover:to-violet-600/5 transition-all duration-500"></div>
-              
               <div className="relative z-10">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-400 to-violet-600 flex items-center justify-center group-hover:rotate-12 transition-transform duration-500">
                   <Work className="text-black text-3xl" />
@@ -129,8 +119,7 @@ const Home = () => {
           </Card>
         </Grid>
       </Grid>
-
-      {/* Stats Section */}
+      {}
       <div className="relative rounded-3xl p-8 bg-gradient-to-r from-black/20 via-gray-900/20 to-black/20 backdrop-blur-xl border border-white/10 mb-16">
         <Typography 
           variant="h3" 
@@ -146,7 +135,6 @@ const Home = () => {
         >
           Community Stats
         </Typography>
-        
         <Grid container spacing={6}>
           <Grid item xs={12} sm={6} md={3}>
             <div className="text-center group hover:scale-110 transition-transform duration-300">
@@ -171,7 +159,6 @@ const Home = () => {
               </Typography>
             </div>
           </Grid>
-          
           <Grid item xs={12} sm={6} md={3}>
             <div className="text-center group hover:scale-110 transition-transform duration-300">
               <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-orange-400 to-pink-600 flex items-center justify-center">
@@ -195,7 +182,6 @@ const Home = () => {
               </Typography>
             </div>
           </Grid>
-          
           <Grid item xs={12} sm={6} md={3}>
             <div className="text-center group hover:scale-110 transition-transform duration-300">
               <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-400 to-violet-600 flex items-center justify-center">
@@ -219,7 +205,6 @@ const Home = () => {
               </Typography>
             </div>
           </Grid>
-          
           <Grid item xs={12} sm={6} md={3}>
             <div className="text-center group hover:scale-110 transition-transform duration-300">
               <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
@@ -248,5 +233,4 @@ const Home = () => {
     </Container>
   );
 };
-
 export default Home;

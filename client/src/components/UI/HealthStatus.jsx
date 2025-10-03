@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Box, Chip } from '@mui/material';
 import { CheckCircle, Error, Warning } from '@mui/icons-material';
-
 const HealthStatus = ({ className = '' }) => {
   const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const fetchHealthStatus = async () => {
     try {
       setLoading(true);
       const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? window.location.origin : 'http://localhost:3002');
       const response = await fetch(`${apiUrl}/api/health`);
-      
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
       const data = await response.json();
       setHealth(data);
       setError(null);
@@ -28,14 +24,11 @@ const HealthStatus = ({ className = '' }) => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchHealthStatus();
-    // Check health every 30 seconds
     const interval = setInterval(fetchHealthStatus, 30000);
     return () => clearInterval(interval);
   }, []);
-
   const getStatusColor = () => {
     if (loading) return 'default';
     if (error) return 'error';
@@ -43,14 +36,12 @@ const HealthStatus = ({ className = '' }) => {
     if (health?.success) return 'warning';
     return 'error';
   };
-
   const getStatusIcon = () => {
     if (loading) return null;
     if (error) return <Error fontSize="small" />;
     if (health?.success && health?.database?.connected) return <CheckCircle fontSize="small" />;
     return <Warning fontSize="small" />;
   };
-
   const getStatusText = () => {
     if (loading) return 'Checking...';
     if (error) return 'API Offline';
@@ -58,7 +49,6 @@ const HealthStatus = ({ className = '' }) => {
     if (health?.success) return `API Online, DB ${health.database?.state || 'Unknown'}`;
     return 'System Error';
   };
-
   return (
     <Box className={`${className}`}>
       <Chip
@@ -71,7 +61,6 @@ const HealthStatus = ({ className = '' }) => {
         onClick={fetchHealthStatus}
         title={health ? `Last checked: ${new Date(health.timestamp).toLocaleTimeString()}` : 'Click to refresh'}
       />
-      
       {health && !loading && (
         <Box className="mt-2 text-xs text-gray-500">
           <Typography variant="caption" display="block">
@@ -95,5 +84,4 @@ const HealthStatus = ({ className = '' }) => {
     </Box>
   );
 };
-
 export default HealthStatus;

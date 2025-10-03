@@ -4,23 +4,17 @@ import { Add, FilterList, Refresh } from '@mui/icons-material';
 import { PageTitle, ProfileCard, CardSkeleton } from '../components';
 import { useAuth } from '../contexts';
 import axios from 'axios';
-
 const Profiles = () => {
   const { user: currentUser, updateUser } = useAuth();
   const [alumni, setAlumni] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [joining, setJoining] = useState(false);
-
-  // Fetch alumni profiles
   const fetchProfiles = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
-      
-      // Fetch all network members
       const response = await axios.get('/api/profiles/all');
-      
       if (response.data.success) {
         setAlumni(response.data.data);
       } else {
@@ -34,28 +28,21 @@ const Profiles = () => {
       setLoading(false);
     }
   }, []);
-
   useEffect(() => {
     fetchProfiles();
   }, [fetchProfiles]);
-
   const handleProfileUpdate = (updatedProfile) => {
     setAlumni(prev => prev.map(profile => 
       profile._id === updatedProfile._id ? updatedProfile : profile
     ));
   };
-
   const handleJoinNetwork = async () => {
     try {
       setJoining(true);
       setError('');
-      
       const response = await axios.post('/api/profiles/join');
-      
       if (response.data.success) {
-        // Update the current user state to reflect network membership
         updateUser({ hasJoinedNetwork: true, networkJoinedAt: new Date() });
-        // Refresh the profiles list to include the current user
         await fetchProfiles();
       } else {
         setError(response.data.message || 'Failed to join network');
@@ -67,30 +54,24 @@ const Profiles = () => {
       setJoining(false);
     }
   };
-
-  // Calculate dynamic stats from alumni data
   const stats = {
     members: alumni.length,
     companies: new Set(alumni.filter(a => a.company).map(a => a.company)).size,
     cities: new Set(alumni.filter(a => a.location?.city).map(a => a.location.city)).size,
     graduationYears: new Set(alumni.filter(a => a.graduationYear).map(a => a.graduationYear)).size
   };
-
   const handleProfileClick = (profile) => {
     console.log('Profile clicked:', profile);
-    // TODO: Navigate to detailed profile view or open modal
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <Container maxWidth="lg" className="pt-8 pb-16">
         <PageTitle
           title="Alumni Network"
-          subtitle={`Connect with fellow FSU Computer Science graduates • ${alumni.length} ${alumni.length === 1 ? 'Member' : 'Members'}`}
+          subtitle={`Connect with fellow Full Sail Web Development graduates • ${alumni.length} ${alumni.length === 1 ? 'Member' : 'Members'}`}
           className="mb-12"
         />
-
-        {/* Action Bar */}
+        {}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center space-x-4">
             <Button
@@ -122,15 +103,13 @@ const Profiles = () => {
             </Button>
           )}
         </div>
-
-        {/* Error Alert */}
+        {}
         {error && (
           <Alert severity="error" className="mb-6 bg-red-900/20 border border-red-500/30 text-red-300">
             {error}
           </Alert>
         )}
-
-        {/* Stats Bar */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="backdrop-blur-xl bg-black/20 border border-white/10 rounded-xl p-4 text-center">
             <Typography variant="h4" className="font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
@@ -165,16 +144,13 @@ const Profiles = () => {
             </Typography>
           </div>
         </div>
-
-        {/* Alumni Grid */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {loading ? (
-            // Loading skeletons
             Array.from({ length: 6 }).map((_, index) => (
               <CardSkeleton key={index} showAvatar lines={3} />
             ))
           ) : alumni.length > 0 ? (
-            // Alumni profile cards
             alumni.map((alumniProfile) => (
               <ProfileCard
                 key={alumniProfile._id || alumniProfile.id}
@@ -184,7 +160,6 @@ const Profiles = () => {
               />
             ))
           ) : (
-            // No profiles found
             <div className="col-span-full text-center py-12">
               <div className="max-w-md mx-auto">
                 <Typography variant="h6" className="text-white/60 mb-4">
@@ -193,7 +168,7 @@ const Profiles = () => {
                 <Typography variant="body2" className="text-white/40 mb-6">
                   {error 
                     ? 'There was an error loading profiles. Please try refreshing the page.' 
-                    : 'Be the first to join our FSU Computer Science Alumni Network! Click "Join Network" above to get started and connect with fellow graduates.'
+                    : 'Be the first to join our Full Sail Web Development Alumni Network! Click "Join Network" above to get started and connect with fellow graduates.'
                   }
                 </Typography>
                 {!error && currentUser && !currentUser.hasJoinedNetwork && (
@@ -210,8 +185,7 @@ const Profiles = () => {
             </div>
           )}
         </div>
-
-        {/* Load More */}
+        {}
         {alumni.length > 0 && !loading && (
           <div className="text-center mt-12">
             <Button
@@ -226,5 +200,4 @@ const Profiles = () => {
     </div>
   );
 };
-
 export default Profiles;

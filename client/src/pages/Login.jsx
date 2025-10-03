@@ -3,23 +3,17 @@ import { Typography, Container, Paper, Button, Box, CircularProgress } from '@mu
 import { Google } from '@mui/icons-material';
 import { useAuth } from '../contexts';
 import { Navigate } from 'react-router-dom';
-
 const Login = () => {
   const { user, loading } = useAuth();
   const [isLoggingIn, setIsLoggingIn] = React.useState(false);
-
-  // If user is already authenticated, redirect to home
   if (!loading && user) {
     return <Navigate to="/" replace />;
   }
-
   const handleGoogleLogin = () => {
     setIsLoggingIn(true);
     const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? window.location.origin : 'http://localhost:3002');
     window.location.href = `${apiUrl}/api/auth/google`;
   };
-
-  // Show loading spinner while checking auth state
   if (loading) {
     return (
       <Container maxWidth="sm">
@@ -29,7 +23,6 @@ const Login = () => {
       </Container>
     );
   }
-
   return (
     <Container maxWidth="sm">
       <Paper className="p-8 text-center mt-16">
@@ -39,7 +32,6 @@ const Login = () => {
         <Typography variant="body1" color="text.secondary" className="mb-6">
           Sign in to access your Tech Talk Alumni Network account
         </Typography>
-
         <Box className="space-y-4">
           <Button
             variant="contained"
@@ -52,7 +44,6 @@ const Login = () => {
             {isLoggingIn ? 'Redirecting to Google...' : 'Continue with Google'}
           </Button>
         </Box>
-
         <Typography variant="body2" color="text.secondary" className="mt-6">
           By signing in, you agree to our Terms of Service and Privacy Policy
         </Typography>
@@ -60,5 +51,4 @@ const Login = () => {
     </Container>
   );
 };
-
 export default Login;

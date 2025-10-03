@@ -1,87 +1,1 @@
-import React from 'react';
-import { Skeleton, Box, Card, CardContent, Typography } from '@mui/material';
-
-// Generic Loading Skeleton
-export const LoadingSkeleton = ({ 
-  variant = 'rectangular', 
-  width, 
-  height, 
-  className = '' 
-}) => {
-  return (
-    <Skeleton 
-      variant={variant} 
-      width={width} 
-      height={height} 
-      className={className}
-    />
-  );
-};
-
-// Card Loading Skeleton
-export const CardSkeleton = ({ showAvatar = false, lines = 3 }) => {
-  return (
-    <Card className="mb-4">
-      <CardContent>
-        <Box className="flex items-start space-x-3">
-          {showAvatar && (
-            <Skeleton variant="circular" width={40} height={40} />
-          )}
-          <Box className="flex-1">
-            <Skeleton variant="text" height={28} width="60%" />
-            {Array.from({ length: lines }).map((_, index) => (
-              <Skeleton 
-                key={index}
-                variant="text" 
-                height={20} 
-                width={index === lines - 1 ? "40%" : "100%"}
-                className="mt-1"
-              />
-            ))}
-          </Box>
-        </Box>
-      </CardContent>
-    </Card>
-  );
-};
-
-// List Loading Skeleton
-export const ListSkeleton = ({ items = 5, showAvatar = true }) => {
-  return (
-    <Box>
-      {Array.from({ length: items }).map((_, index) => (
-        <Box key={index} className="flex items-center space-x-3 py-3 border-b border-gray-200 last:border-b-0">
-          {showAvatar && (
-            <Skeleton variant="circular" width={48} height={48} />
-          )}
-          <Box className="flex-1">
-            <Skeleton variant="text" height={24} width="70%" />
-            <Skeleton variant="text" height={20} width="50%" className="mt-1" />
-          </Box>
-        </Box>
-      ))}
-    </Box>
-  );
-};
-
-// Table Loading Skeleton
-export const TableSkeleton = ({ rows = 5, columns = 4 }) => {
-  return (
-    <Box>
-      {Array.from({ length: rows }).map((_, rowIndex) => (
-        <Box key={rowIndex} className="flex space-x-4 py-3 border-b border-gray-200">
-          {Array.from({ length: columns }).map((_, colIndex) => (
-            <Skeleton 
-              key={colIndex}
-              variant="text" 
-              height={24} 
-              width={colIndex === 0 ? "30%" : colIndex === columns - 1 ? "20%" : "25%"}
-            />
-          ))}
-        </Box>
-      ))}
-    </Box>
-  );
-};
-
-export default LoadingSkeleton;
+import React from 'react';import { Skeleton, Box, Card, CardContent, Typography } from '@mui/material';export const LoadingSkeleton = ({   variant = 'rectangular',   width,   height,   className = '' }) => {  return (    <Skeleton       variant={variant}       width={width}       height={height}       className={className}    />  );};export const CardSkeleton = ({ showAvatar = false, lines = 3 }) => {  return (    <Card className="mb-4">      <CardContent>        <Box className="flex items-start space-x-3">          {showAvatar && (            <Skeleton variant="circular" width={40} height={40} />          )}          <Box className="flex-1">            <Skeleton variant="text" height={28} width="60%" />            {Array.from({ length: lines }).map((_, index) => (              <Skeleton                 key={index}                variant="text"                 height={20}                 width={index === lines - 1 ? "40%" : "100%"}                className="mt-1"              />            ))}          </Box>        </Box>      </CardContent>    </Card>  );};export const ListSkeleton = ({ items = 5, showAvatar = true }) => {  return (    <Box>      {Array.from({ length: items }).map((_, index) => (        <Box key={index} className="flex items-center space-x-3 py-3 border-b border-gray-200 last:border-b-0">          {showAvatar && (            <Skeleton variant="circular" width={48} height={48} />          )}          <Box className="flex-1">            <Skeleton variant="text" height={24} width="70%" />            <Skeleton variant="text" height={20} width="50%" className="mt-1" />          </Box>        </Box>      ))}    </Box>  );};export const TableSkeleton = ({ rows = 5, columns = 4 }) => {  return (    <Box>      {Array.from({ length: rows }).map((_, rowIndex) => (        <Box key={rowIndex} className="flex space-x-4 py-3 border-b border-gray-200">          {Array.from({ length: columns }).map((_, colIndex) => (            <Skeleton               key={colIndex}              variant="text"               height={24}               width={colIndex === 0 ? "30%" : colIndex === columns - 1 ? "20%" : "25%"}            />          ))}        </Box>      ))}    </Box>  );};export default LoadingSkeleton;

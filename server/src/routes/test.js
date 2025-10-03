@@ -1,58 +1,1 @@
-import express from 'express';
-import TestModel from '../models/Test.js';
-
-const router = express.Router();
-
-// @desc    Test database connection by creating a test document
-// @route   POST /api/test/connection
-// @access  Public (for development only)
-router.post('/connection', async (req, res) => {
-  try {
-    const testDoc = new TestModel({
-      name: 'Connection Test',
-      message: `Database connection test at ${new Date().toISOString()}`
-    });
-
-    const savedDoc = await testDoc.save();
-    
-    res.status(201).json({
-      success: true,
-      message: 'Database write operation successful',
-      data: savedDoc,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Database write operation failed',
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-});
-
-// @desc    Get test documents to verify database read operations
-// @route   GET /api/test/connection
-// @access  Public (for development only)
-router.get('/connection', async (req, res) => {
-  try {
-    const testDocs = await TestModel.find().sort({ createdAt: -1 }).limit(5);
-    
-    res.status(200).json({
-      success: true,
-      message: 'Database read operation successful',
-      count: testDocs.length,
-      data: testDocs,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Database read operation failed',
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-});
-
-export default router;
+import express from 'express';import TestModel from '../models/Test.js';const router = express.Router();router.post('/connection', async (req, res) => {  try {    const testDoc = new TestModel({      name: 'Connection Test',      message: `Database connection test at ${new Date().toISOString()}`    });    const savedDoc = await testDoc.save();    res.status(201).json({      success: true,      message: 'Database write operation successful',      data: savedDoc,      timestamp: new Date().toISOString()    });  } catch (error) {    res.status(500).json({      success: false,      message: 'Database write operation failed',      error: error.message,      timestamp: new Date().toISOString()    });  }});router.get('/connection', async (req, res) => {  try {    const testDocs = await TestModel.find().sort({ createdAt: -1 }).limit(5);    res.status(200).json({      success: true,      message: 'Database read operation successful',      count: testDocs.length,      data: testDocs,      timestamp: new Date().toISOString()    });  } catch (error) {    res.status(500).json({      success: false,      message: 'Database read operation failed',      error: error.message,      timestamp: new Date().toISOString()    });  }});export default router;

@@ -10,24 +10,19 @@ import { connectDB } from './config/database.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import passport from './config/passport.js';
 import { cleanupExpiredTokens } from './utils/auth.js';
-
 import authRoutes from './routes/auth.js';
 import healthRoutes from './routes/health.js';
 import profileRoutes from './routes/profile.js';
-
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 3002;
-
 app.set('trust proxy', 1);
-
 connectDB();
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "img-src": ["'self'", "data:", "https://lh3.googleusercontent.com", "https://lh4.googleusercontent.com", "https://lh5.googleusercontent.com", "https://lh6.googleusercontent.com"],
+      "img-src": ["'self'", "data:", "https:"]
     },
   },
 }));
@@ -39,7 +34,6 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret-change-in-production',
   resave: false,
@@ -51,26 +45,19 @@ app.use(session({
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
   }
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
-
-// API routes MUST come before static file serving and wildcards
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
-app.use('/api/profiles', profileRoutes); // For /api/profiles/all and /api/profiles/join endpoints
-app.use('/api', profileRoutes); // For /api/users/:id endpoint
-
+app.use('/api/profiles', profileRoutes); 
+app.use('/api', profileRoutes); 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(process.cwd(), '../client/dist')));
-  
-  // Wildcard route for SPA - MUST come after all API routes
   app.get('*', (req, res) => {
     res.sendFile(path.join(process.cwd(), '../client/dist', 'index.html'));
   });
 }
-
 app.use(errorHandler);
 app.use('*', (req, res) => {
   res.status(404).json({
@@ -78,13 +65,11 @@ app.use('*', (req, res) => {
     message: 'Route not found'
   });
 });
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Client URL: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
   console.log(`Database: ${process.env.NODE_ENV === 'production' ? 'MongoDB Atlas' : 'Local MongoDB'}`);
   console.log(`Google OAuth: ${process.env.GOOGLE_CLIENT_ID ? 'Configured' : 'Not configured'}`);
-  
   setInterval(() => {
     cleanupExpiredTokens();
   }, 60 * 60 * 1000);

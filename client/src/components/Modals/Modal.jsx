@@ -1,77 +1,1 @@
-import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  IconButton,
-  Typography,
-  Box
-} from '@mui/material';
-import { Close } from '@mui/icons-material';
-
-const Modal = ({
-  open = false,
-  onClose,
-  title,
-  children,
-  actions,
-  maxWidth = 'sm',
-  fullWidth = true,
-  disableBackdropClick = false,
-  showCloseButton = true,
-  className = ''
-}) => {
-  const handleClose = (event, reason) => {
-    if (disableBackdropClick && reason === 'backdropClick') {
-      return;
-    }
-    onClose();
-  };
-
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      maxWidth={maxWidth}
-      fullWidth={fullWidth}
-      className={className}
-      PaperProps={{
-        sx: { borderRadius: 2 }
-      }}
-    >
-      {title && (
-        <DialogTitle className="pb-2">
-          <Box className="flex justify-between items-center">
-            <Typography variant="h6" component="div" className="font-semibold">
-              {title}
-            </Typography>
-            {showCloseButton && (
-              <IconButton
-                aria-label="close"
-                onClick={onClose}
-                size="small"
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <Close />
-              </IconButton>
-            )}
-          </Box>
-        </DialogTitle>
-      )}
-      
-      <DialogContent className="py-4">
-        {children}
-      </DialogContent>
-      
-      {actions && (
-        <DialogActions className="px-6 pb-4">
-          {actions}
-        </DialogActions>
-      )}
-    </Dialog>
-  );
-};
-
-export default Modal;
+import React from 'react';import {  Dialog,  DialogTitle,  DialogContent,  DialogActions,  Button,  IconButton,  Typography,  Box} from '@mui/material';import { Close } from '@mui/icons-material';const Modal = ({  open = false,  onClose,  title,  children,  actions,  maxWidth = 'sm',  fullWidth = true,  disableBackdropClick = false,  showCloseButton = true,  className = ''}) => {  const handleClose = (event, reason) => {    if (disableBackdropClick && reason === 'backdropClick') {      return;    }    onClose();  };  return (    <Dialog      open={open}      onClose={handleClose}      maxWidth={maxWidth}      fullWidth={fullWidth}      className={className}      PaperProps={{        sx: { borderRadius: 2 }      }}    >      {title && (        <DialogTitle className="pb-2">          <Box className="flex justify-between items-center">            <Typography variant="h6" component="div" className="font-semibold">              {title}            </Typography>            {showCloseButton && (              <IconButton                aria-label="close"                onClick={onClose}                size="small"                className="text-gray-500 hover:text-gray-700"              >                <Close />              </IconButton>            )}          </Box>        </DialogTitle>      )}      <DialogContent className="py-4">        {children}      </DialogContent>      {actions && (        <DialogActions className="px-6 pb-4">          {actions}        </DialogActions>      )}    </Dialog>  );};export default Modal;

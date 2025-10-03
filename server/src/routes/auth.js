@@ -3,26 +3,17 @@ import passport from '../config/passport.js';
 import { generateTokens, refreshAccessToken, revokeRefreshToken } from '../utils/auth.js';
 import { authenticateToken } from '../middleware/auth.js';
 import User from '../models/User.js';
-
 const router = express.Router();
-
 router.get('/google', 
   passport.authenticate('google', { 
     scope: ['profile', 'email'] 
   })
 );
-
-// @desc    Google OAuth callback
-// @route   GET /api/auth/google/callback
-// @access  Public
 router.get('/google/callback',
   passport.authenticate('google', { session: false }),
   async (req, res) => {
     try {
-      // Generate JWT tokens
       const tokens = await generateTokens(req.user);
-      
-      // Redirect to client with access token
       const clientURL = process.env.CLIENT_URL || 'http://localhost:5173';
       const redirectURL = `${clientURL}/auth/callback?token=${tokens.accessToken}&user=${encodeURIComponent(JSON.stringify({
         id: req.user._id,
@@ -40,11 +31,9 @@ router.get('/google/callback',
     }
   }
 );
-
 router.get('/me', authenticateToken, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-__v');
-    
     res.json({
       success: true,
       data: user,
@@ -58,13 +47,10 @@ router.get('/me', authenticateToken, async (req, res) => {
     });
   }
 });
-
-// Debug endpoint to test token validation
 router.get('/debug-token', async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
-    
     console.log('Debug token check:', {
       hasAuthHeader: !!authHeader,
       authHeaderValue: authHeader ? 'Bearer ***' : 'none',
@@ -72,7 +58,6 @@ router.get('/debug-token', async (req, res) => {
       tokenStart: token ? token.substring(0, 10) + '...' : 'none',
       jwtSecretExists: !!process.env.JWT_SECRET
     });
-
     if (!token) {
       return res.json({
         success: false,
@@ -83,8 +68,6 @@ router.get('/debug-token', async (req, res) => {
         }
       });
     }
-
-    // Try to decode without verification first
     const jwt = await import('jsonwebtoken');
     let decoded;
     try {
@@ -98,12 +81,9 @@ router.get('/debug-token', async (req, res) => {
         error: decodeError.message
       });
     }
-
-    // Now try to verify
     try {
       const verified = jwt.default.verify(token, process.env.JWT_SECRET);
       console.log('Token verified successfully:', verified);
-      
       return res.json({
         success: true,
         message: 'Token is valid',
@@ -125,7 +105,6 @@ router.get('/debug-token', async (req, res) => {
         }
       });
     }
-
   } catch (error) {
     console.error('Debug token endpoint error:', error);
     res.status(500).json({
@@ -135,20 +114,16 @@ router.get('/debug-token', async (req, res) => {
     });
   }
 });
-
 router.post('/refresh', async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
-    
     if (!refreshToken) {
       return res.status(401).json({
         success: false,
         message: 'Refresh token required'
       });
     }
-
     const tokens = await refreshAccessToken(refreshToken);
-    
     res.json({
       success: true,
       data: tokens,
@@ -161,15 +136,12 @@ router.post('/refresh', async (req, res) => {
     });
   }
 });
-
 router.post('/logout', authenticateToken, async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
-    
     if (refreshToken) {
       await revokeRefreshToken(refreshToken);
     }
-    
     res.json({
       success: true,
       message: 'Logged out successfully'
@@ -181,7 +153,6 @@ router.post('/logout', authenticateToken, async (req, res) => {
     });
   }
 });
-
 router.get('/status', (req, res) => {
   res.json({
     success: true,
@@ -193,5 +164,4 @@ router.get('/status', (req, res) => {
     message: 'Authentication service status'
   });
 });
-
 export default router;

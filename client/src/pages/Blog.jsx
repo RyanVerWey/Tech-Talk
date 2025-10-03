@@ -2,8 +2,6 @@ import React from 'react';
 import { Container, Paper, Button, Box } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { PageTitle, BlogCard, CardSkeleton } from '../components';
-
-// Mock data for demonstration
 const mockBlogPosts = [
   {
     id: 1,
@@ -11,7 +9,7 @@ const mockBlogPosts = [
     excerpt: 'Learn how to set up a React project with TypeScript and best practices for type safety.',
     author: {
       name: 'John Doe',
-      avatar: 'https://via.placeholder.com/40x40?text=JD'
+      avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=JohnDoe'
     },
     createdAt: '2025-09-15T10:00:00Z',
     votes: { up: 24, down: 2 },
@@ -27,7 +25,7 @@ const mockBlogPosts = [
     excerpt: 'A comprehensive guide to building robust and scalable REST APIs using Node.js and Express framework.',
     author: {
       name: 'Jane Smith',
-      avatar: 'https://via.placeholder.com/40x40?text=JS'
+      avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=JaneSmith'
     },
     createdAt: '2025-09-12T14:30:00Z',
     votes: { up: 18, down: 1 },
@@ -37,30 +35,20 @@ const mockBlogPosts = [
     userRating: 4
   }
 ];
-
 const Blog = () => {
-  const [loading] = React.useState(false); // Will be used when API is implemented
-
+  const [loading] = React.useState(false); 
   const handleVote = (postId, voteType) => {
     console.log(`Vote ${voteType} for post ${postId}`);
-    // TODO: Implement vote logic
   };
-
   const handleRate = (postId, rating) => {
     console.log(`Rate ${rating} for post ${postId}`);
-    // TODO: Implement rating logic
   };
-
   const handleComment = (postId) => {
     console.log(`Comment on post ${postId}`);
-    // TODO: Implement comment logic
   };
-
   const handlePostClick = (post) => {
     console.log('View post:', post.title);
-    // TODO: Navigate to post detail
   };
-
   return (
     <Container maxWidth="lg" className="py-8">
       <Box className="flex justify-between items-center mb-8">
@@ -76,16 +64,13 @@ const Blog = () => {
           New Post
         </Button>
       </Box>
-
-      {/* Blog Posts Grid */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {loading ? (
-          // Loading skeletons
           Array.from({ length: 4 }).map((_, index) => (
             <CardSkeleton showAvatar lines={4} key={index} />
           ))
         ) : mockBlogPosts.length > 0 ? (
-          // Blog posts
           mockBlogPosts.map((post) => (
             <BlogCard
               key={post.id}
@@ -97,7 +82,6 @@ const Blog = () => {
             />
           ))
         ) : (
-          // Empty state
           <div className="col-span-full">
             <Paper className="p-8 text-center">
               <PageTitle 
@@ -120,5 +104,4 @@ const Blog = () => {
     </Container>
   );
 };
-
 export default Blog;
