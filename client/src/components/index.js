@@ -3,6 +3,9 @@ export { default as Layout } from './Layout/Layout';
 export { default as Header } from './Layout/Header';
 export { default as Footer } from './Layout/Footer';
 
+// Route Components
+export { default as ProtectedRoute } from './ProtectedRoute';
+
 // UI Components
 export { default as PageTitle } from './UI/PageTitle';
 export { default as LoadingButton } from './UI/LoadingButton';

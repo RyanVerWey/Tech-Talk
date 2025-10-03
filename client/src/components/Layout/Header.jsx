@@ -104,24 +104,22 @@ const Header = () => {
         <Box className="ml-4 flex items-center">
           {user ? (
             <Box className="flex items-center space-x-3">
+              <img
+                src={user.avatar || `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=00D4FF&color=fff`}
+                alt={user.displayName || `${user.firstName} ${user.lastName}`}
+                className="w-8 h-8 rounded-full border-2 border-cyan-400 border-opacity-60"
+              />
               {!isMobile && (
-                <>
-                  <img
-                    src={user.avatar}
-                    alt={user.name}
-                    className="w-8 h-8 rounded-full border-2 border-white border-opacity-30"
-                  />
-                  <Typography variant="body2" className="text-white">
-                    {user.name}
-                  </Typography>
-                </>
+                <Typography variant="body2" className="text-white font-medium">
+                  {user.displayName || `${user.firstName} ${user.lastName}`}
+                </Typography>
               )}
               <Button 
                 color="inherit" 
                 onClick={logout}
                 variant="outlined"
                 size="small"
-                className="border-white border-opacity-30 hover:bg-white hover:bg-opacity-10"
+                className="border-red-400 border-opacity-50 text-red-300 hover:bg-red-500 hover:bg-opacity-20 hover:border-red-400"
               >
                 Logout
               </Button>

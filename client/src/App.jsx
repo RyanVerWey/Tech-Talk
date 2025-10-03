@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Blog from './pages/Blog';
 import Profiles from './pages/Profiles';
@@ -102,11 +103,27 @@ function App() {
               </div>
               <Layout>
                 <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/profiles" element={<Profiles />} />
-                  <Route path="/projects" element={<Projects />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/" element={
+                    <ProtectedRoute>
+                      <Home />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/blog" element={
+                    <ProtectedRoute>
+                      <Blog />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/profiles" element={
+                    <ProtectedRoute>
+                      <Profiles />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/projects" element={
+                    <ProtectedRoute>
+                      <Projects />
+                    </ProtectedRoute>
+                  } />
                 </Routes>
               </Layout>
             </div>
