@@ -30,7 +30,6 @@ const ProfileCard = ({
     bio,
     graduationYear,
     degree,
-    major,
     socialLinks = {},
     createdAt
   } = user || {};
