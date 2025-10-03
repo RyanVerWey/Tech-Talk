@@ -55,6 +55,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// API routes MUST come before static file serving and wildcards
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
@@ -64,6 +65,7 @@ app.use('/api', profileRoutes); // For /api/users/:id endpoint
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(process.cwd(), '../client/dist')));
   
+  // Wildcard route for SPA - MUST come after all API routes
   app.get('*', (req, res) => {
     res.sendFile(path.join(process.cwd(), '../client/dist', 'index.html'));
   });
