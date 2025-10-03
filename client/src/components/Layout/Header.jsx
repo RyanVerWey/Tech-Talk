@@ -105,13 +105,9 @@ const Header = () => {
           {user ? (
             <Box className="flex items-center space-x-3">
               <img
-                src={user.avatar || user.picture || `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=00D4FF&color=fff`}
+                src={user.avatar || user.picture || `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="#00D4FF"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="Arial" font-size="12">${user.firstName?.[0] || '?'}${user.lastName?.[0] || ''}</text></svg>`)}`}
                 alt={user.displayName || `${user.firstName} ${user.lastName}`}
                 className="w-8 h-8 rounded-full border-2 border-cyan-400 border-opacity-60"
-                onError={(e) => {
-                  console.log('Avatar failed to load, user data:', user);
-                  e.target.src = `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=00D4FF&color=fff`;
-                }}
               />
               {!isMobile && (
                 <Typography variant="body2" className="text-white font-medium">

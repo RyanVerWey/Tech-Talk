@@ -24,7 +24,6 @@ const AuthProvider = ({ children }) => {
       if (userData) {
         try {
           const parsedUser = JSON.parse(decodeURIComponent(userData));
-          console.log('OAuth user data received:', parsedUser);
           setUser(parsedUser);
           setLoading(false);
         } catch (error) {
@@ -50,7 +49,6 @@ const AuthProvider = ({ children }) => {
       
       const response = await axios.get('/api/auth/me');
       if (response.data.success) {
-        console.log('API user data received:', response.data.data);
         setUser(response.data.data);
       } else {
         setUser(null);
