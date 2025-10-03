@@ -1,27 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Typography,
   Avatar,
   Box,
   Chip,
-  IconButton
+  IconButton,
+  Button
 } from '@mui/material';
-import { GitHub, LinkedIn, Launch, LocationOn, School } from '@mui/icons-material';
+import { GitHub, LinkedIn, Launch, LocationOn, School, Edit } from '@mui/icons-material';
+import { useAuth } from '../../contexts';
+import ProfileEditDialog from '../Modals/ProfileEditDialog';
 
 const ProfileCard = ({
   user,
   onClick,
-  className = ''
+  className = '',
+  onProfileUpdate
 }) => {
+  const { user: currentUser } = useAuth();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  // Extract data from MongoDB user structure
   const {
-    name = 'Unknown',
+    _id,
+    displayName,
+    firstName,
+    lastName,
     avatar,
-    portfolio,
-    github,
-    linkedin,
-    joinDate,
-    location = 'Tallahassee, FL'
+    bio,
+    graduationYear,
+    degree,
+    major,
+    socialLinks = {},
+    createdAt
   } = user || {};
+
+  const name = displayName || `${firstName || ''} ${lastName || ''}`.trim() || 'Unknown';
+  const isOwnProfile = currentUser?._id === _id;
 
   const handleSocialClick = (e, url) => {
     e.stopPropagation();
@@ -51,16 +66,23 @@ const ProfileCard = ({
               />
             </div>
             
-            {/* Name and Location */}
+            {/* Name, Bio, and Academic Info */}
             <div className="flex-grow flex flex-col justify-center">
               <Typography variant="h6" className="font-bold text-white mb-1 leading-tight">
                 {name}
               </Typography>
               
+              {bio && (
+                <Typography variant="body2" className="text-white/80 mb-2 line-clamp-2">
+                  {bio}
+                </Typography>
+              )}
+              
               <div className="flex items-center space-x-1 mb-1">
-                <LocationOn className="text-cyan-400 text-sm" />
+                <School className="text-cyan-400 text-sm" />
                 <Typography variant="body2" className="text-cyan-400">
-                  {location}
+                  {graduationYear ? `Class of ${graduationYear}` : 'FSU Alumni'}
+                  {degree && ` • ${degree}`}
                 </Typography>
               </div>
             </div>
@@ -72,30 +94,30 @@ const ProfileCard = ({
               CONNECT
             </Typography>
             <div className="flex justify-center space-x-2">
-              {github && (
+              {socialLinks.github && (
                 <IconButton
                   size="small"
-                  onClick={(e) => handleSocialClick(e, github)}
+                  onClick={(e) => handleSocialClick(e, socialLinks.github)}
                   className="bg-gray-700/50 text-white hover:bg-gray-600/50 hover:text-cyan-400 transition-all duration-300"
                   title="GitHub"
                 >
                   <GitHub fontSize="small" />
                 </IconButton>
               )}
-              {linkedin && (
+              {socialLinks.linkedin && (
                 <IconButton
                   size="small"
-                  onClick={(e) => handleSocialClick(e, linkedin)}
+                  onClick={(e) => handleSocialClick(e, socialLinks.linkedin)}
                   className="bg-blue-600/50 text-white hover:bg-blue-500/50 hover:text-cyan-400 transition-all duration-300"
                   title="LinkedIn"
                 >
                   <LinkedIn fontSize="small" />
                 </IconButton>
               )}
-              {portfolio && (
+              {socialLinks.portfolio && (
                 <IconButton
                   size="small"
-                  onClick={(e) => handleSocialClick(e, portfolio)}
+                  onClick={(e) => handleSocialClick(e, socialLinks.portfolio)}
                   className="bg-purple-600/50 text-white hover:bg-purple-500/50 hover:text-cyan-400 transition-all duration-300"
                   title="Portfolio"
                 >
@@ -105,16 +127,44 @@ const ProfileCard = ({
             </div>
           </div>
 
-          {/* Member since */}
-          {joinDate && (
-            <div className="mt-2 text-center">
+          {/* Member since / Edit Profile */}
+          <div className="mt-2 text-center">
+            {createdAt && (
               <Typography variant="caption" className="text-white/40 text-xs">
-                Alumni since {new Date(joinDate).getFullYear()}
+                Alumni since {new Date(createdAt).getFullYear()}
               </Typography>
-            </div>
-          )}
+            )}
+            {isOwnProfile && (
+              <div className="mt-2">
+                <Button
+                  size="small"
+                  startIcon={<Edit fontSize="small" />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditDialogOpen(true);
+                  }}
+                  className="text-cyan-400 hover:bg-cyan-400/10 text-xs"
+                >
+                  Edit Profile
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Profile Edit Dialog */}
+      {isOwnProfile && (
+        <ProfileEditDialog
+          open={editDialogOpen}
+          onClose={() => setEditDialogOpen(false)}
+          user={user}
+          onProfileUpdate={(updatedUser) => {
+            onProfileUpdate?.(updatedUser);
+            setEditDialogOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 };

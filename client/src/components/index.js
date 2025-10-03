@@ -26,6 +26,7 @@ export { default as StarRating } from './Forms/StarRating';
 // Modal Components
 export { default as Modal } from './Modals/Modal';
 export { default as ConfirmDialog } from './Modals/ConfirmDialog';
+export { default as ProfileEditDialog } from './Modals/ProfileEditDialog';
 
 // Card Components
 export { default as ProfileCard } from './Cards/ProfileCard';
