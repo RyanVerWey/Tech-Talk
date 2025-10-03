@@ -170,6 +170,15 @@ router.put('/',
         socialLinks
       } = req.body;
 
+      // Get current user data once
+      const currentUser = await User.findById(req.user._id);
+      if (!currentUser) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
       // Build update object
       const updateData = {};
       
@@ -178,14 +187,19 @@ router.put('/',
       if (graduationYear !== undefined) updateData.graduationYear = graduationYear;
       if (degree !== undefined) updateData.degree = degree;
       if (company !== undefined) updateData.company = company;
+      
+      // Handle location update safely
       if (city !== undefined) {
-        updateData['location.city'] = city;
+        updateData.location = {
+          ...currentUser.location,
+          city: city
+        };
       }
       
       // Handle social links update
       if (socialLinks) {
-        const currentUser = await User.findById(req.user._id);
-        const updatedSocialLinks = { ...currentUser.socialLinks.toObject() };
+        const currentSocialLinks = currentUser.socialLinks || {};
+        const updatedSocialLinks = { ...currentSocialLinks };
         
         if (socialLinks.portfolio !== undefined) updatedSocialLinks.portfolio = socialLinks.portfolio;
         if (socialLinks.github !== undefined) updatedSocialLinks.github = socialLinks.github;
@@ -196,7 +210,6 @@ router.put('/',
 
       // Update displayName if firstName or lastName changed
       if (firstName !== undefined || lastName !== undefined) {
-        const currentUser = await User.findById(req.user._id);
         const newFirstName = firstName !== undefined ? firstName : currentUser.firstName;
         const newLastName = lastName !== undefined ? lastName : currentUser.lastName;
         updateData.displayName = `${newFirstName} ${newLastName}`.trim();
@@ -226,6 +239,14 @@ router.put('/',
         message: 'Profile updated successfully'
       });
     } catch (error) {
+      // Enhanced error logging for debugging
+      console.error('Profile update error:', {
+        message: error.message,
+        stack: error.stack,
+        requestBody: req.body,
+        userId: req.user._id
+      });
+
       if (error.name === 'ValidationError') {
         const validationErrors = Object.values(error.errors).map(err => ({
           field: err.path,
