@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import path from 'path';
 import session from 'express-session';
 import { connectDB } from './config/database.js';
 import { errorHandler } from './middleware/errorHandler.js';
@@ -48,6 +49,14 @@ app.use(passport.session());
 
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(process.cwd(), '../client/dist')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(process.cwd(), '../client/dist', 'index.html'));
+  });
+}
 
 app.use(errorHandler);
 app.use('*', (req, res) => {
