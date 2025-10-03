@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
     "start": "cd server && npm start",
     "build": "npm run server:install && npm run client:build",
-    "heroku-prebuild": "npm run server:install",
+    "heroku-prebuild": "npm run server:install && npm run client:install",
     "client:dev": "cd client && npm run dev",
     "server:dev": "cd server && npm run dev",
     "client:build": "cd client && npm run build",
