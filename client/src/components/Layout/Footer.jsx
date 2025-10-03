@@ -189,7 +189,7 @@ const Footer = () => {
                 }
               }}
             >
-              © {currentYear} <span>TechTalk Alumni Network</span>. Built with <Favorite className="inline text-red-400 mx-1" fontSize="small" /> by Full Sail developers, for Full Sail developers.
+              © {currentYear} <span>TechTalk Alumni Network</span>.
             </Typography>
           </div>
         </Box>
