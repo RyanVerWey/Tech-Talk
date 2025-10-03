@@ -150,9 +150,16 @@ router.put('/',
   ],
   async (req, res) => {
     try {
+      console.log('Profile update request received:', {
+        userId: req.user?._id,
+        body: req.body,
+        timestamp: new Date().toISOString()
+      });
+
       // Check for validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        console.log('Validation errors:', errors.array());
         return res.status(400).json({
           success: false,
           message: 'Validation failed',
@@ -190,10 +197,12 @@ router.put('/',
       
       // Handle location update safely
       if (city !== undefined) {
+        const currentLocation = currentUser.location || {};
         updateData.location = {
-          ...currentUser.location,
+          ...currentLocation,
           city: city
         };
+        console.log('Location update:', { currentLocation, newCity: city, updateData: updateData.location });
       }
       
       // Handle social links update
