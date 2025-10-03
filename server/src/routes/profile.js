@@ -151,10 +151,21 @@ router.put('/',
   async (req, res) => {
     try {
       console.log('Profile update request received:', {
-        userId: req.user?._id,
+        userId: req.user?._id || 'undefined',
         body: req.body,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        hasUser: !!req.user,
+        authHeader: req.headers.authorization ? 'present' : 'missing'
       });
+
+      // Check if user is authenticated
+      if (!req.user) {
+        console.error('Authentication failed: req.user is undefined');
+        return res.status(401).json({
+          success: false,
+          message: 'Authentication required'
+        });
+      }
 
       // Check for validation errors
       const errors = validationResult(req);
@@ -253,7 +264,7 @@ router.put('/',
         message: error.message,
         stack: error.stack,
         requestBody: req.body,
-        userId: req.user._id
+        userId: req.user?._id || 'undefined'
       });
 
       if (error.name === 'ValidationError') {
