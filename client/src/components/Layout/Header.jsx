@@ -15,7 +15,7 @@ import { useAuth } from '../../contexts';
 
 const Header = () => {
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -69,7 +69,7 @@ const Header = () => {
         </Typography>
         
         {/* Desktop Navigation */}
-        {!isMobile && (
+        {!isMobile && isAuthenticated && (
           <Box className="flex items-center space-x-2">
             {navItems.map((item) => {
               const Icon = item.icon;

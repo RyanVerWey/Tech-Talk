@@ -88,6 +88,7 @@ const AuthProvider = ({ children }) => {
 
   const value = {
     user,
+    isAuthenticated: !!user,
     login,
     logout,
     loading,
