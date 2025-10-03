@@ -22,7 +22,14 @@ const PORT = process.env.PORT || 3002;
 app.set('trust proxy', 1);
 
 connectDB();
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "img-src": ["'self'", "data:", "https://lh3.googleusercontent.com", "https://lh4.googleusercontent.com", "https://lh5.googleusercontent.com", "https://lh6.googleusercontent.com"],
+    },
+  },
+}));
 app.use(morgan('combined'));
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
