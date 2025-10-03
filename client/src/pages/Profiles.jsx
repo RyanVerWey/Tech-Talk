@@ -68,29 +68,13 @@ const Profiles = () => {
     }
   };
 
-  // Calculate dynamic stats from alumni data - SIMPLIFIED FOR DEBUGGING
+  // Calculate dynamic stats from alumni data
   const stats = {
     members: alumni.length,
-    companies: 0, // Temporarily disabled
-    cities: 0,    // Temporarily disabled  
-    graduationYears: 0 // Temporarily disabled
+    companies: new Set(alumni.filter(a => a.company).map(a => a.company)).size,
+    cities: new Set(alumni.filter(a => a.location?.city).map(a => a.location.city)).size,
+    graduationYears: new Set(alumni.filter(a => a.graduationYear).map(a => a.graduationYear)).size
   };
-
-  // Debug logging - Remove this after fixing
-  if (alumni.length > 0) {
-    console.log('=== DEBUGGING ALUMNI DATA ===');
-    console.log('Total alumni records:', alumni.length);
-    alumni.forEach((alum, index) => {
-      console.log(`Alumni ${index + 1}:`, {
-        name: alum.displayName || `${alum.firstName} ${alum.lastName}`,
-        company: alum.company,
-        city: alum.location?.city,
-        graduationYear: alum.graduationYear,
-        hasJoinedNetwork: alum.hasJoinedNetwork
-      });
-    });
-    console.log('=== END DEBUG ===');
-  }
 
   const handleProfileClick = (profile) => {
     console.log('Profile clicked:', profile);
@@ -202,12 +186,27 @@ const Profiles = () => {
           ) : (
             // No profiles found
             <div className="col-span-full text-center py-12">
-              <Typography variant="h6" className="text-white/60 mb-4">
-                No alumni profiles found
-              </Typography>
-              <Typography variant="body2" className="text-white/40">
-                {error ? 'There was an error loading profiles.' : 'Be the first to join our network!'}
-              </Typography>
+              <div className="max-w-md mx-auto">
+                <Typography variant="h6" className="text-white/60 mb-4">
+                  {error ? 'Error Loading Profiles' : 'No Alumni Network Members Yet'}
+                </Typography>
+                <Typography variant="body2" className="text-white/40 mb-6">
+                  {error 
+                    ? 'There was an error loading profiles. Please try refreshing the page.' 
+                    : 'Be the first to join our FSU Computer Science Alumni Network! Click "Join Network" above to get started and connect with fellow graduates.'
+                  }
+                </Typography>
+                {!error && currentUser && !currentUser.hasJoinedNetwork && (
+                  <Button
+                    variant="contained"
+                    onClick={handleJoinNetwork}
+                    disabled={joining}
+                    className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
+                  >
+                    {joining ? 'Joining...' : 'Join Network Now'}
+                  </Button>
+                )}
+              </div>
             </div>
           )}
         </div>

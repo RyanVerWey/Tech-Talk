@@ -26,16 +26,7 @@ router.get('/all', authenticateToken, async (req, res) => {
       isActive: true 
     }).select('-__v -refreshTokens -googleId');
 
-    // Debug logging
-    console.log(`Found ${networkMembers.length} network members`);
-    if (networkMembers.length > 0) {
-      console.log('First member sample:', {
-        name: networkMembers[0].displayName,
-        company: networkMembers[0].company,
-        city: networkMembers[0].location?.city,
-        graduationYear: networkMembers[0].graduationYear
-      });
-    }
+
 
     res.json({
       success: true,
