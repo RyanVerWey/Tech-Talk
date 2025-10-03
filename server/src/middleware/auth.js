@@ -4,10 +4,18 @@ import User from '../models/User.js';
 // Middleware to authenticate JWT tokens
 export const authenticateToken = async (req, res, next) => {
   try {
+    console.log('🔐 Auth middleware started');
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
+    console.log('🔐 Auth check:', {
+      hasAuthHeader: !!authHeader,
+      hasToken: !!token,
+      tokenPrefix: token ? token.substring(0, 20) + '...' : 'none'
+    });
+
     if (!token) {
+      console.log('🔐 No token provided');
       return res.status(401).json({
         success: false,
         message: 'Access token required'
@@ -15,12 +23,17 @@ export const authenticateToken = async (req, res, next) => {
     }
 
     // Verify token
+    console.log('🔐 Verifying token...');
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('🔐 Token verified successfully:', { userId: decoded.userId, type: decoded.type });
     
     // Get user from database
+    console.log('🔐 Looking up user:', decoded.userId);
     const user = await User.findById(decoded.userId).select('-__v');
+    console.log('🔐 User lookup result:', { found: !!user, isActive: user?.isActive });
     
     if (!user || !user.isActive) {
+      console.log('🔐 User not found or inactive');
       return res.status(401).json({
         success: false,
         message: 'Invalid token or user not active'
@@ -29,10 +42,14 @@ export const authenticateToken = async (req, res, next) => {
 
     // Add user to request object
     req.user = user;
+    console.log('🔐 Auth successful, user set:', { userId: user._id, email: user.email });
     next();
     
   } catch (error) {
+    console.log('🔐 Auth error:', { name: error.name, message: error.message });
+    
     if (error.name === 'TokenExpiredError') {
+      console.log('🔐 Token expired');
       return res.status(401).json({
         success: false,
         message: 'Token expired',
@@ -41,6 +58,7 @@ export const authenticateToken = async (req, res, next) => {
     }
     
     if (error.name === 'JsonWebTokenError') {
+      console.log('🔐 Invalid token format');
       return res.status(401).json({
         success: false,
         message: 'Invalid token',
