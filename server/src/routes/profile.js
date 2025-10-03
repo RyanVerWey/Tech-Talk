@@ -16,12 +16,7 @@ const urlValidation = (field) => {
     .withMessage(`${field} must be a valid URL with http or https protocol`);
 };
 
-// Validation middleware for bio
-const bioValidation = body('bio')
-  .optional()
-  .isLength({ max: 500 })
-  .withMessage('Bio must be 500 characters or less')
-  .trim();
+
 
 // @desc    Get current user's profile
 // @route   GET /api/profile
@@ -57,11 +52,9 @@ router.get('/', authenticateToken, async (req, res) => {
 router.put('/', 
   authenticateToken,
   [
-    bioValidation,
     urlValidation('socialLinks.portfolio'),
     urlValidation('socialLinks.github'),
     urlValidation('socialLinks.linkedin'),
-    urlValidation('socialLinks.twitter'),
     body('firstName')
       .optional()
       .trim()
@@ -81,11 +74,16 @@ router.put('/',
       .trim()
       .isLength({ max: 100 })
       .withMessage('Degree must be 100 characters or less'),
-    body('major')
+    body('company')
       .optional()
       .trim()
       .isLength({ max: 100 })
-      .withMessage('Major must be 100 characters or less')
+      .withMessage('Company must be 100 characters or less'),
+    body('city')
+      .optional()
+      .trim()
+      .isLength({ max: 100 })
+      .withMessage('City must be 100 characters or less')
   ],
   async (req, res) => {
     try {
@@ -102,10 +100,10 @@ router.put('/',
       const {
         firstName,
         lastName,
-        bio,
         graduationYear,
         degree,
-        major,
+        company,
+        city,
         socialLinks
       } = req.body;
 
@@ -114,10 +112,12 @@ router.put('/',
       
       if (firstName !== undefined) updateData.firstName = firstName;
       if (lastName !== undefined) updateData.lastName = lastName;
-      if (bio !== undefined) updateData.bio = bio;
       if (graduationYear !== undefined) updateData.graduationYear = graduationYear;
       if (degree !== undefined) updateData.degree = degree;
-      if (major !== undefined) updateData.major = major;
+      if (company !== undefined) updateData.company = company;
+      if (city !== undefined) {
+        updateData['location.city'] = city;
+      }
       
       // Handle social links update
       if (socialLinks) {
@@ -127,7 +127,6 @@ router.put('/',
         if (socialLinks.portfolio !== undefined) updatedSocialLinks.portfolio = socialLinks.portfolio;
         if (socialLinks.github !== undefined) updatedSocialLinks.github = socialLinks.github;
         if (socialLinks.linkedin !== undefined) updatedSocialLinks.linkedin = socialLinks.linkedin;
-        if (socialLinks.twitter !== undefined) updatedSocialLinks.twitter = socialLinks.twitter;
         
         updateData.socialLinks = updatedSocialLinks;
       }

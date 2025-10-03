@@ -25,15 +25,14 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    bio: '',
     graduationYear: '',
     degree: '',
-    major: '',
+    company: '',
+    city: '',
     socialLinks: {
       portfolio: '',
       github: '',
-      linkedin: '',
-      twitter: ''
+      linkedin: ''
     }
   });
 
@@ -43,15 +42,14 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
       setFormData({
         firstName: user.firstName || '',
         lastName: user.lastName || '',
-        bio: user.bio || '',
         graduationYear: user.graduationYear || '',
         degree: user.degree || '',
-        major: user.major || '',
+        company: user.company || '',
+        city: user.location?.city || '',
         socialLinks: {
           portfolio: user.socialLinks?.portfolio || '',
           github: user.socialLinks?.github || '',
-          linkedin: user.socialLinks?.linkedin || '',
-          twitter: user.socialLinks?.twitter || ''
+          linkedin: user.socialLinks?.linkedin || ''
         }
       });
       setError('');
@@ -82,10 +80,9 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
     
     if (!formData.firstName.trim()) errors.push('First name is required');
     if (!formData.lastName.trim()) errors.push('Last name is required');
-    if (formData.bio.length > 500) errors.push('Bio must be 500 characters or less');
     
     // Validate URLs
-    const urlFields = ['portfolio', 'github', 'linkedin', 'twitter'];
+    const urlFields = ['portfolio', 'github', 'linkedin'];
     urlFields.forEach(field => {
       const url = formData.socialLinks[field];
       if (url && !isValidUrl(url)) {
@@ -244,23 +241,36 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
-                    label="Bio"
-                    value={formData.bio}
-                    onChange={(e) => handleInputChange('bio', e.target.value)}
+                    label="Company"
+                    value={formData.company}
+                    onChange={(e) => handleInputChange('company', e.target.value)}
                     fullWidth
-                    multiline
-                    rows={3}
                     variant="outlined"
-                    helperText={`${formData.bio.length}/500 characters`}
+                    placeholder="e.g. Google, Microsoft, Startup Inc."
                     className="bg-white/5"
                     InputLabelProps={{ className: 'text-white/70' }}
                     InputProps={{ 
                       className: 'text-white',
                       style: { backgroundColor: 'rgba(255,255,255,0.05)' }
                     }}
-                    FormHelperTextProps={{ className: 'text-white/50' }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="City"
+                    value={formData.city}
+                    onChange={(e) => handleInputChange('city', e.target.value)}
+                    fullWidth
+                    variant="outlined"
+                    placeholder="e.g. San Francisco, New York, Austin"
+                    className="bg-white/5"
+                    InputLabelProps={{ className: 'text-white/70' }}
+                    InputProps={{ 
+                      className: 'text-white',
+                      style: { backgroundColor: 'rgba(255,255,255,0.05)' }
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -272,7 +282,7 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                 Academic Information
               </Typography>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     label="Graduation Year"
                     type="number"
@@ -288,13 +298,14 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     label="Degree"
                     value={formData.degree}
                     onChange={(e) => handleInputChange('degree', e.target.value)}
                     fullWidth
                     variant="outlined"
+                    placeholder="e.g. Bachelor of Science, Master of Science"
                     className="bg-white/5"
                     InputLabelProps={{ className: 'text-white/70' }}
                     InputProps={{ 
@@ -303,21 +314,7 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    label="Major"
-                    value={formData.major}
-                    onChange={(e) => handleInputChange('major', e.target.value)}
-                    fullWidth
-                    variant="outlined"
-                    className="bg-white/5"
-                    InputLabelProps={{ className: 'text-white/70' }}
-                    InputProps={{ 
-                      className: 'text-white',
-                      style: { backgroundColor: 'rgba(255,255,255,0.05)' }
-                    }}
-                  />
-                </Grid>
+
               </Grid>
             </Box>
 
@@ -369,22 +366,6 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
                     placeholder="https://linkedin.com/in/yourusername"
                     InputProps={{
                       startAdornment: <LinkedIn className="text-blue-400 mr-2" />,
-                      className: 'text-white',
-                      style: { backgroundColor: 'rgba(255,255,255,0.05)' }
-                    }}
-                    InputLabelProps={{ className: 'text-white/70' }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Twitter URL"
-                    value={formData.socialLinks.twitter}
-                    onChange={(e) => handleInputChange('socialLinks.twitter', e.target.value)}
-                    fullWidth
-                    variant="outlined"
-                    placeholder="https://twitter.com/yourusername"
-                    InputProps={{
-                      startAdornment: <span className="text-blue-400 mr-2 text-sm">𝕏</span>,
                       className: 'text-white',
                       style: { backgroundColor: 'rgba(255,255,255,0.05)' }
                     }}
