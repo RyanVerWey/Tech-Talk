@@ -166,7 +166,11 @@ const ProfileEditDialog = ({ open, onClose, user, onProfileUpdate }) => {
       maxWidth="md" 
       fullWidth
       PaperProps={{
-        className: 'bg-gradient-to-br from-gray-950 to-black border border-white/10'
+        className: 'bg-black border border-white/20',
+        sx: {
+          backgroundColor: '#000000 !important',
+          backgroundImage: 'none !important'
+        }
       }}
     >
       <DialogTitle className="text-white border-b border-white/10">
