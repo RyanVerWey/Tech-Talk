@@ -58,6 +58,7 @@ app.use(passport.session());
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/profiles', profileRoutes); // For /api/profiles/all and /api/profiles/join endpoints
 app.use('/api', profileRoutes); // For /api/users/:id endpoint
 
 if (process.env.NODE_ENV === 'production') {
