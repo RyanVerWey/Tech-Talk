@@ -59,6 +59,83 @@ router.get('/me', authenticateToken, async (req, res) => {
   }
 });
 
+// Debug endpoint to test token validation
+router.get('/debug-token', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    console.log('Debug token check:', {
+      hasAuthHeader: !!authHeader,
+      authHeaderValue: authHeader ? 'Bearer ***' : 'none',
+      hasToken: !!token,
+      tokenStart: token ? token.substring(0, 10) + '...' : 'none',
+      jwtSecretExists: !!process.env.JWT_SECRET
+    });
+
+    if (!token) {
+      return res.json({
+        success: false,
+        message: 'No token provided',
+        debug: {
+          hasAuthHeader: !!authHeader,
+          authHeader: authHeader || 'missing'
+        }
+      });
+    }
+
+    // Try to decode without verification first
+    const jwt = await import('jsonwebtoken');
+    let decoded;
+    try {
+      decoded = jwt.default.decode(token);
+      console.log('Token decoded (no verification):', decoded);
+    } catch (decodeError) {
+      console.log('Token decode error:', decodeError.message);
+      return res.json({
+        success: false,
+        message: 'Token decode failed',
+        error: decodeError.message
+      });
+    }
+
+    // Now try to verify
+    try {
+      const verified = jwt.default.verify(token, process.env.JWT_SECRET);
+      console.log('Token verified successfully:', verified);
+      
+      return res.json({
+        success: true,
+        message: 'Token is valid',
+        debug: {
+          decoded: decoded,
+          verified: verified,
+          userId: verified.userId
+        }
+      });
+    } catch (verifyError) {
+      console.log('Token verification error:', verifyError.message);
+      return res.json({
+        success: false,
+        message: 'Token verification failed',
+        error: verifyError.message,
+        debug: {
+          decoded: decoded,
+          errorName: verifyError.name
+        }
+      });
+    }
+
+  } catch (error) {
+    console.error('Debug token endpoint error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Debug endpoint error',
+      error: error.message
+    });
+  }
+});
+
 router.post('/refresh', async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
