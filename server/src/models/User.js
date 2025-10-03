@@ -124,6 +124,16 @@ const userSchema = new mongoose.Schema({
     }
   },
   
+  // Network membership status
+  hasJoinedNetwork: {
+    type: Boolean,
+    default: false
+  },
+  networkJoinedAt: {
+    type: Date,
+    default: null
+  },
+  
   // Account status
   isActive: {
     type: Boolean,

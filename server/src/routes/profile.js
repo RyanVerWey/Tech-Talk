@@ -16,7 +16,69 @@ const urlValidation = (field) => {
     .withMessage(`${field} must be a valid URL with http or https protocol`);
 };
 
+// @desc    Get all network members
+// @route   GET /api/profiles/all
+// @access  Private
+router.get('/all', authenticateToken, async (req, res) => {
+  try {
+    const networkMembers = await User.find({ 
+      hasJoinedNetwork: true,
+      isActive: true 
+    }).select('-__v -refreshTokens -googleId');
 
+    res.json({
+      success: true,
+      data: networkMembers,
+      count: networkMembers.length,
+      message: 'Network members retrieved successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving network members',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// @desc    Join the alumni network
+// @route   POST /api/profiles/join
+// @access  Private
+router.post('/join', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    if (user.hasJoinedNetwork) {
+      return res.status(400).json({
+        success: false,
+        message: 'You have already joined the network'
+      });
+    }
+
+    user.hasJoinedNetwork = true;
+    user.networkJoinedAt = new Date();
+    await user.save();
+
+    res.json({
+      success: true,
+      data: user,
+      message: 'Successfully joined the alumni network'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error joining network',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
 
 // @desc    Get current user's profile
 // @route   GET /api/profile
@@ -50,7 +112,6 @@ router.get('/', authenticateToken, async (req, res) => {
 // @route   PUT /api/profile
 // @access  Private
 router.put('/', 
-  authenticateToken,
   [
     urlValidation('socialLinks.portfolio'),
     urlValidation('socialLinks.github'),
@@ -133,17 +194,29 @@ router.put('/',
 
       // Update displayName if firstName or lastName changed
       if (firstName !== undefined || lastName !== undefined) {
-        const user = await User.findById(req.user._id);
-        const newFirstName = firstName !== undefined ? firstName : user.firstName;
-        const newLastName = lastName !== undefined ? lastName : user.lastName;
-        updateData.displayName = `${newFirstName} ${newLastName}`;
+        const currentUser = await User.findById(req.user._id);
+        const newFirstName = firstName !== undefined ? firstName : currentUser.firstName;
+        const newLastName = lastName !== undefined ? lastName : currentUser.lastName;
+        updateData.displayName = `${newFirstName} ${newLastName}`.trim();
       }
 
-      const updatedUser = await User.findByIdAndUpdate(
-        req.user._id,
-        updateData,
-        { new: true, runValidators: true }
-      ).select('-__v');
+      // Ensure we're updating the correct user and not creating duplicates
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.user._id }, // Ensure we match by exact user ID
+        { $set: updateData },
+        { 
+          new: true, 
+          runValidators: true,
+          upsert: false // Never create new documents, only update existing ones
+        }
+      ).select('-__v -refreshTokens -googleId');
+
+      if (!updatedUser) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
 
       res.json({
         success: true,
@@ -173,28 +246,25 @@ router.put('/',
   }
 );
 
-// @desc    Get user profile by ID
+// @desc    Get public profile by user ID
 // @route   GET /api/users/:id
-// @access  Public
+// @access  Private
 router.get('/users/:id', [
-  param('id')
-    .isMongoId()
-    .withMessage('Invalid user ID format')
-], async (req, res) => {
+  param('id').isMongoId().withMessage('Invalid user ID')
+], authenticateToken, async (req, res) => {
   try {
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid user ID',
+        message: 'Invalid user ID format',
         errors: errors.array()
       });
     }
 
     const user = await User.findById(req.params.id)
-      .select('-__v -email -googleId -lastLogin -createdAt -updatedAt -isActive -isVerified -role -privacy')
-      .lean();
+      .select('-__v -refreshTokens -googleId');
     
     if (!user) {
       return res.status(404).json({
@@ -203,30 +273,9 @@ router.get('/users/:id', [
       });
     }
 
-    // Apply privacy settings (if user has privacy settings configured)
-    const publicProfile = {
-      _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      displayName: user.displayName,
-      avatar: user.avatar,
-      bio: user.bio,
-      graduationYear: user.graduationYear,
-      degree: user.degree,
-      major: user.major,
-      socialLinks: user.socialLinks,
-      skills: user.skills,
-      experience: user.experience
-    };
-
-    // Apply contact preferences
-    if (user.contactPreferences?.showEmail) {
-      publicProfile.email = user.email;
-    }
-
     res.json({
       success: true,
-      data: publicProfile,
+      data: user,
       message: 'User profile retrieved successfully'
     });
   } catch (error) {

@@ -30,10 +30,9 @@ router.get('/google/callback',
         firstName: req.user.firstName,
         lastName: req.user.lastName,
         avatar: req.user.avatar,
-        role: req.user.role
-      }))}`;
-
-      res.redirect(redirectURL);
+        role: req.user.role,
+        hasJoinedNetwork: req.user.hasJoinedNetwork
+      }))}`;        res.redirect(redirectURL);
     } catch (error) {
       console.error('OAuth callback error:', error);
       const clientURL = process.env.CLIENT_URL || 'http://localhost:5173';

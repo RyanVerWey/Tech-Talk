@@ -6,10 +6,11 @@ import { useAuth } from '../contexts';
 import axios from 'axios';
 
 const Profiles = () => {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, updateUser } = useAuth();
   const [alumni, setAlumni] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [joining, setJoining] = useState(false);
 
   // Fetch alumni profiles
   const fetchProfiles = useCallback(async () => {
@@ -17,28 +18,22 @@ const Profiles = () => {
       setLoading(true);
       setError('');
       
-      // For now, we'll fetch the current user's profile as an example
-      // In a real application, you'd have an endpoint like /api/users or /api/profiles
-      const response = await axios.get('/api/profile');
+      // Fetch all network members
+      const response = await axios.get('/api/profiles/all');
       
       if (response.data.success) {
-        // For demonstration, we'll show the current user's profile
-        // In production, this would be a list of all public profiles
-        setAlumni([response.data.data]);
+        setAlumni(response.data.data);
       } else {
         setError('Failed to load alumni profiles');
       }
     } catch (err) {
       console.error('Error fetching profiles:', err);
       setError('Failed to load alumni profiles. Please try again.');
-      // For development, show at least the current user
-      if (currentUser) {
-        setAlumni([currentUser]);
-      }
+      setAlumni([]);
     } finally {
       setLoading(false);
     }
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     fetchProfiles();
@@ -48,6 +43,37 @@ const Profiles = () => {
     setAlumni(prev => prev.map(profile => 
       profile._id === updatedProfile._id ? updatedProfile : profile
     ));
+  };
+
+  const handleJoinNetwork = async () => {
+    try {
+      setJoining(true);
+      setError('');
+      
+      const response = await axios.post('/api/profiles/join');
+      
+      if (response.data.success) {
+        // Update the current user state to reflect network membership
+        updateUser({ hasJoinedNetwork: true, networkJoinedAt: new Date() });
+        // Refresh the profiles list to include the current user
+        await fetchProfiles();
+      } else {
+        setError(response.data.message || 'Failed to join network');
+      }
+    } catch (err) {
+      console.error('Error joining network:', err);
+      setError(err.response?.data?.message || 'Failed to join network. Please try again.');
+    } finally {
+      setJoining(false);
+    }
+  };
+
+  // Calculate dynamic stats from alumni data
+  const stats = {
+    members: alumni.length,
+    companies: new Set(alumni.filter(a => a.company).map(a => a.company)).size,
+    cities: new Set(alumni.filter(a => a.location?.city).map(a => a.location.city)).size,
+    graduationYears: new Set(alumni.filter(a => a.graduationYear).map(a => a.graduationYear)).size
   };
 
   const handleProfileClick = (profile) => {
@@ -60,7 +86,7 @@ const Profiles = () => {
       <Container maxWidth="lg" className="pt-8 pb-16">
         <PageTitle
           title="Alumni Network"
-          subtitle="Connect with fellow FSU Computer Science graduates"
+          subtitle={`Connect with fellow FSU Computer Science graduates • ${alumni.length} ${alumni.length === 1 ? 'Member' : 'Members'}`}
           className="mb-12"
         />
 
@@ -84,13 +110,17 @@ const Profiles = () => {
               Refresh
             </Button>
           </div>
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
-          >
-            Join Network
-          </Button>
+          {currentUser && !currentUser.hasJoinedNetwork && (
+            <Button
+              variant="contained"
+              startIcon={<Add />}
+              onClick={handleJoinNetwork}
+              disabled={joining}
+              className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
+            >
+              {joining ? 'Joining...' : 'Join Network'}
+            </Button>
+          )}
         </div>
 
         {/* Error Alert */}
@@ -104,7 +134,7 @@ const Profiles = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="backdrop-blur-xl bg-black/20 border border-white/10 rounded-xl p-4 text-center">
             <Typography variant="h4" className="font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              {alumni.length}
+              {stats.members}
             </Typography>
             <Typography variant="body2" className="text-white/60">
               Alumni Members
@@ -112,7 +142,7 @@ const Profiles = () => {
           </div>
           <div className="backdrop-blur-xl bg-black/20 border border-white/10 rounded-xl p-4 text-center">
             <Typography variant="h4" className="font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              25
+              {stats.companies}
             </Typography>
             <Typography variant="body2" className="text-white/60">
               Companies
@@ -120,7 +150,7 @@ const Profiles = () => {
           </div>
           <div className="backdrop-blur-xl bg-black/20 border border-white/10 rounded-xl p-4 text-center">
             <Typography variant="h4" className="font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-              12
+              {stats.cities}
             </Typography>
             <Typography variant="body2" className="text-white/60">
               Cities
@@ -128,7 +158,7 @@ const Profiles = () => {
           </div>
           <div className="backdrop-blur-xl bg-black/20 border border-white/10 rounded-xl p-4 text-center">
             <Typography variant="h4" className="font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
-              5
+              {stats.graduationYears}
             </Typography>
             <Typography variant="body2" className="text-white/60">
               Grad Years

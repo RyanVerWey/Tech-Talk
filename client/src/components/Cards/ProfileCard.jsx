@@ -27,12 +27,15 @@ const ProfileCard = ({
     firstName,
     lastName,
     avatar,
-    bio,
+    company,
+    location = {},
     graduationYear,
     degree,
     socialLinks = {},
     createdAt
   } = user || {};
+  
+  const city = location.city;
 
   const name = displayName || `${firstName || ''} ${lastName || ''}`.trim() || 'Unknown';
   const isOwnProfile = currentUser?._id === _id;
@@ -51,7 +54,7 @@ const ProfileCard = ({
     >
       {/* Simplified card with gradient border */}
       <div className="bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-orange-500/20 p-0.5 rounded-2xl">
-        <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-4 h-full">
+        <div className="bg-gradient-to-br from-gray-950 to-black rounded-2xl p-4 h-full">
           
           {/* Profile Content - Horizontal Layout */}
           <div className="flex items-center space-x-4">
@@ -71,9 +74,18 @@ const ProfileCard = ({
                 {name}
               </Typography>
               
-              {bio && (
+              {(company || city) && (
                 <Typography variant="body2" className="text-white/80 mb-2 line-clamp-2">
-                  {bio}
+                  {company && (
+                    <span className="font-medium text-cyan-300">{company}</span>
+                  )}
+                  {company && city && <span className="text-white/60"> • </span>}
+                  {city && (
+                    <span className="flex items-center inline">
+                      <LocationOn className="text-cyan-400 text-sm mr-1" />
+                      {city}
+                    </span>
+                  )}
                 </Typography>
               )}
               

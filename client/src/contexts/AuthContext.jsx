@@ -86,11 +86,16 @@ const AuthProvider = ({ children }) => {
     window.location.href = '/login';
   };
 
+  const updateUser = (updatedUserData) => {
+    setUser(prev => ({ ...prev, ...updatedUserData }));
+  };
+
   const value = {
     user,
     isAuthenticated: !!user,
     login,
     logout,
+    updateUser,
     loading,
   };
 
